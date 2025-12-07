@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#0f1c2e] via-[#1a2d47] to-[#213655]">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Masjid Admin Panel</h1>
+            <p class="text-[#66e1dc]">Manage hadiths and display settings</p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <svg class="w-6 h-6 text-[#66e1dc]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                How to Update Hadiths
+            </h2>
+            <div class="text-white/80 space-y-3">
+                <p><strong class="text-[#66e1dc]">Option 1: Google Sheets (Recommended)</strong></p>
+                <ol class="list-decimal list-inside space-y-2 ml-4">
+                    <li>Create a Google Sheet with two columns: <code class="bg-[#0f1c2e] px-2 py-1 rounded text-[#66e1dc]">text</code> and <code class="bg-[#0f1c2e] px-2 py-1 rounded text-[#66e1dc]">source</code></li>
+                    <li>Add your hadiths (one per row)</li>
+                    <li>Go to File → Share → Publish to web</li>
+                    <li>Select "Comma-separated values (.csv)" and publish</li>
+                    <li>Copy the CSV link and paste it below</li>
+                </ol>
+                
+                <p class="mt-4"><strong class="text-[#66e1dc]">Option 2: Admin Panel (This Page)</strong></p>
+                <p class="ml-4">Use the editor below to add, edit, or remove hadiths. Changes are saved to your browser's localStorage.</p>
+            </div>
+        </div>
+
+        <!-- Google Sheets Configuration -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-4">Google Sheets URL</h2>
+            <div class="flex gap-3">
+                <input 
+                    type="text" 
+                    id="sheetUrl" 
+                    placeholder="Paste your Google Sheets CSV URL here..."
+                    class="flex-1 bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc]"
+                >
+                <button 
+                    onclick="saveSheetUrl()"
+                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
+                >
+                    Save
+                </button>
+            </div>
+            <p class="text-white/50 text-sm mt-2">This URL will be used to fetch hadiths automatically</p>
+        </div>
+
+        <!-- Hadith Editor -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-white">Current Hadiths</h2>
+                <button 
+                    onclick="addHadith()"
+                    class="bg-[#66e1dc]/20 text-[#66e1dc] font-medium px-4 py-2 rounded-xl hover:bg-[#66e1dc]/30 transition-colors flex items-center gap-2"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add Hadith
+                </button>
+            </div>
+            
+            <div id="hadithList" class="space-y-4">
+                <!-- Hadiths will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="text-center">
+            <button 
+                onclick="saveHadiths()"
+                class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-bold px-12 py-4 rounded-xl text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#66e1dc]/20"
+            >
+                Save All Changes
+            </button>
+        </div>
+
+        <!-- Export Section -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mt-8">
+            <h2 class="text-xl font-semibold text-white mb-4">Export Hadiths</h2>
+            <div class="flex gap-3">
+                <button 
+                    onclick="exportJSON()"
+                    class="bg-[#0f1c2e] text-white font-medium px-6 py-3 rounded-xl hover:bg-[#0f1c2e]/80 transition-colors border border-[#66e1dc]/30"
+                >
+                    Download as JSON
+                </button>
+                <button 
+                    onclick="exportCSV()"
+                    class="bg-[#0f1c2e] text-white font-medium px-6 py-3 rounded-xl hover:bg-[#0f1c2e]/80 transition-colors border border-[#66e1dc]/30"
+                >
+                    Download as CSV
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default hadiths
+        let hadiths = [
+            { text: "Prayer is the pillar of religion and the key to Paradise.", source: "Hadith" },
+            { text: "The best prayer is that which is performed on time.", source: "Hadith" },
+            { text: "Whoever maintains the prayers will have light and proof on the Day of Resurrection.", source: "Hadith" },
+            { text: "The first thing about which people will be called to account will be prayer.", source: "Hadith" },
+            { text: "When you stand for prayer, pray as if it is your last prayer.", source: "Hadith" },
+            { text: "Indeed, prayer prohibits immorality and wrongdoing.", source: "Quran 29:45" }
+        ];
+
+        // Load hadiths from localStorage on page load
+        function loadHadiths() {
+            const saved = localStorage.getItem('masjid_hadiths');
+            if (saved) {
+                hadiths = JSON.parse(saved);
+            }
+            renderHadiths();
+            
+            // Load sheet URL if saved
+            const sheetUrl = localStorage.getItem('masjid_sheet_url');
+            if (sheetUrl) {
+                document.getElementById('sheetUrl').value = sheetUrl;
+            }
+        }
+
+        // Render hadith list
+        function renderHadiths() {
+            const container = document.getElementById('hadithList');
+            container.innerHTML = hadiths.map((hadith, index) => `
+                <div class="bg-[#0f1c2e]/50 rounded-xl p-4 border border-[#66e1dc]/10">
+                    <div class="flex justify-between items-start gap-4 mb-3">
+                        <span class="text-[#66e1dc] text-sm font-medium">#${index + 1}</span>
+                        <button 
+                            onclick="deleteHadith(${index})"
+                            class="text-red-400 hover:text-red-300 transition-colors"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <textarea 
+                        class="w-full bg-[#1a2d47] border border-[#66e1dc]/20 rounded-lg px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc] resize-none mb-3"
+                        rows="2"
+                        placeholder="Hadith text..."
+                        onchange="updateHadith(${index}, 'text', this.value)"
+                    >${hadith.text}</textarea>
+                    <input 
+                        type="text"
+                        class="w-full bg-[#1a2d47] border border-[#66e1dc]/20 rounded-lg px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc]"
+                        placeholder="Source (e.g., Sahih Bukhari, Quran 2:45)"
+                        value="${hadith.source}"
+                        onchange="updateHadith(${index}, 'source', this.value)"
+                    >
+                </div>
+            `).join('');
+        }
+
+        // Add new hadith
+        function addHadith() {
+            hadiths.push({ text: "", source: "Hadith" });
+            renderHadiths();
+            // Scroll to bottom
+            document.getElementById('hadithList').lastElementChild.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update hadith
+        function updateHadith(index, field, value) {
+            hadiths[index][field] = value;
+        }
+
+        // Delete hadith
+        function deleteHadith(index) {
+            if (confirm('Are you sure you want to delete this hadith?')) {
+                hadiths.splice(index, 1);
+                renderHadiths();
+            }
+        }
+
+        // Save hadiths to localStorage
+        function saveHadiths() {
+            localStorage.setItem('masjid_hadiths', JSON.stringify(hadiths));
+            alert('Hadiths saved successfully! The display will update automatically.');
+        }
+
+        // Save Google Sheets URL
+        function saveSheetUrl() {
+            const url = document.getElementById('sheetUrl').value.trim();
+            if (url) {
+                localStorage.setItem('masjid_sheet_url', url);
+                alert('Google Sheets URL saved! The display will fetch hadiths from this sheet.');
+            }
+        }
+
+        // Export as JSON
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(hadiths, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'hadiths.json';
+            a.click();
+        }
+
+        // Export as CSV
+        function exportCSV() {
+            const csv = 'text,source\n' + hadiths.map(h => `"${h.text}","${h.source}"`).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'hadiths.csv';
+            a.click();
+        }
+
+        // Initialize
+        loadHadiths();
+    </script>
+</body>
+</html>
+

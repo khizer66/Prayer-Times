@@ -13,6 +13,7 @@ A beautiful, modern digital display for showing daily Islamic prayer times at Ma
 - 📅 **Hijri Calendar** - Displays Islamic calendar date
 - 📜 **Rotating Hadiths** - Inspirational quotes from authentic sources
 - 🎨 **Seasonal Colors** - Theme adapts to spring, summer, autumn, and winter
+- ⚙️ **Admin Panel** - Easy hadith management via `admin.html`
 
 ## Deployment
 
@@ -76,6 +77,29 @@ The `method` parameter uses the following calculation methods:
 
 See [Aladhan API documentation](https://aladhan.com/prayer-times-api) for full list.
 
+## Managing Hadiths
+
+### Admin Panel (Recommended)
+
+1. Open `admin.html` in your browser (e.g., `https://prayertimes5.netlify.app/admin.html`)
+2. Add, edit, or remove hadiths using the visual editor
+3. Click "Save All Changes" to store hadiths in browser localStorage
+4. The main display will automatically use the updated hadiths
+
+### Google Sheets Integration
+
+1. Create a Google Sheet with two columns: `text` | `source`
+2. Add your hadiths (one per row)
+3. Go to **File → Share → Publish to web**
+4. Select **Comma-separated values (.csv)** and publish
+5. Copy the CSV URL
+6. Open `admin.html` and paste the URL in the "Google Sheets URL" field
+7. Click "Save" - the display will fetch hadiths from your sheet automatically
+
+### Direct Editing
+
+You can also edit hadiths directly in `index.html` by modifying the `defaultHadiths` array in the CONFIG section.
+
 ## Keyboard Shortcuts (Development Mode)
 
 When `productionMode` is `false`:
@@ -129,6 +153,24 @@ Prayer times are automatically fetched daily from the Aladhan API. The app cache
 - Clear browser cache
 - Unregister old service worker
 - Hard refresh (Ctrl+Shift+R / Cmd+Shift+R)
+
+### Hadiths not updating
+- Make sure you've saved changes in `admin.html`
+- If using Google Sheets, verify the CSV URL is correct and the sheet is published
+- Clear browser cache and localStorage if needed
+- Check that the same browser is used for both admin panel and display
+
+## Files Structure
+
+```
+Prayer-Times/
+├── index.html      # Main prayer times display
+├── admin.html      # Hadith management panel
+├── sw.js           # Service worker for offline support
+├── manifest.json   # PWA manifest
+├── netlify.toml    # Netlify deployment configuration
+└── README.md       # This file
+```
 
 ## License
 

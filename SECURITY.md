@@ -31,21 +31,31 @@ The admin panel (`admin.html`) is currently **publicly accessible** without any 
 3. **IP Whitelisting**: If using Netlify/Vercel, restrict access by IP in `netlify.toml` or Vercel config
 4. **Monitor Changes**: Add logging to track when hadiths are modified
 
-### **Option 2: Add Simple Password Protection (Recommended)**
+### **Option 2: Add Simple Password Protection (Recommended)** ✅ **IMPLEMENTED**
 
 **Implementation:**
-- Add a password prompt on page load
-- Store password hash in localStorage (or use a simple check)
-- Password can be set in `netlify.toml` or hardcoded
+- Password prompt on page load (already added to `admin.html`)
+- Uses `sessionStorage` for authentication (clears when browser closes)
+- Password is hardcoded in JavaScript (can be easily changed)
+- Can be enabled/disabled with a single flag
+
+**Current Status:**
+- ✅ Code is implemented in `admin.html` (lines 118-145)
+- ⚠️ Currently **disabled** by default (`ENABLE_PASSWORD_PROTECTION = false`)
+- 🔧 To enable: Set `ENABLE_PASSWORD_PROTECTION = true` in `admin.html`
+- 🔑 Default password: `masjid2024` (change this!)
 
 **Pros:**
-- Easy to implement
-- Prevents casual access
-- No server required
+- ✅ Easy to implement (already done!)
+- ✅ Prevents casual access
+- ✅ No server required
+- ✅ Uses sessionStorage (more secure than localStorage - clears on close)
+- ✅ Can be toggled on/off easily
 
 **Cons:**
-- Password is visible in source code (can be obfuscated)
-- Not suitable for high-security scenarios
+- ⚠️ Password is visible in source code (can be obfuscated if needed)
+- ⚠️ Not suitable for high-security scenarios
+- ⚠️ Plain text password comparison (not hashed - acceptable for this use case)
 
 ### **Option 3: Full Authentication (For Production)**
 
@@ -79,38 +89,56 @@ This provides:
 - Easy to maintain
 - Prevents casual unauthorized access
 
-**Implementation Priority:**
-1. ✅ Add password prompt (5 minutes)
-2. ⚠️ Obfuscate admin URL (2 minutes)
-3. 📝 Add change logging (optional, 15 minutes)
+**Implementation Status:**
+1. ✅ **DONE** - Password prompt implemented (can be enabled by setting flag to `true`)
+2. ⚠️ **OPTIONAL** - Obfuscate admin URL (rename `admin.html` to something like `admin-xyz123.html`)
+3. 📝 **OPTIONAL** - Add change logging (track when hadiths are modified)
 
 ## Implementation Examples
 
-### Simple Password Protection
+### Simple Password Protection ✅ **ALREADY IMPLEMENTED**
 
+The password protection is already implemented in `admin.html`. To enable it:
+
+1. Open `admin.html`
+2. Find the security configuration section (around line 118)
+3. Change `ENABLE_PASSWORD_PROTECTION = false` to `ENABLE_PASSWORD_PROTECTION = true`
+4. Change `ADMIN_PASSWORD = 'masjid2024'` to your desired password
+
+**Current Implementation:**
 ```javascript
-// Add to admin.html
-const ADMIN_PASSWORD = 'your-secure-password-here'; // Change this!
+// In admin.html (lines 118-145)
+const ENABLE_PASSWORD_PROTECTION = false; // Set to true to enable
+const ADMIN_PASSWORD = 'masjid2024'; // CHANGE THIS PASSWORD!
 
 function checkAuth() {
+    if (!ENABLE_PASSWORD_PROTECTION) return true;
+    
     const stored = sessionStorage.getItem('admin_authenticated');
     if (stored === 'true') return true;
     
-    const password = prompt('Enter admin password:');
+    const password = prompt('Enter admin password to access the panel:');
     if (password === ADMIN_PASSWORD) {
         sessionStorage.setItem('admin_authenticated', 'true');
         return true;
     }
-    alert('Access denied');
+    
+    alert('Access denied. Incorrect password.');
     window.location.href = '/';
     return false;
 }
 
-// Call on page load
+// Called automatically on page load
 if (!checkAuth()) {
-    document.body.innerHTML = '<h1>Access Denied</h1>';
+    document.body.innerHTML = '<div>Access Denied</div>';
 }
 ```
+
+**Key Features:**
+- Uses `sessionStorage` (clears when browser closes - more secure)
+- Can be enabled/disabled with a single flag
+- Redirects to home page on failed authentication
+- Simple prompt-based authentication
 
 ### IP Whitelisting (Netlify)
 

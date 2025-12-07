@@ -44,7 +44,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { margin: 0; padding: 0; overflow: hidden; font-family: 'Outfit', sans-serif; }
+        body { margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        /* TV-optimized: Allow scrolling if needed, but prefer no-scroll */
+        body.no-scroll { overflow: hidden; }
+        body.allow-scroll { overflow-y: auto; overflow-x: hidden; }
         
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
         @keyframes pulse-glow { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.7; } }
@@ -161,6 +164,36 @@
     <div id="root"></div>
     
     <script type="text/babel">
+        // ==================== SECURITY CONFIGURATION ====================
+        // Set ENABLE_PASSWORD_PROTECTION to true to require a password
+        // Set ADMIN_PASSWORD to your desired password (change this!)
+        const ENABLE_PASSWORD_PROTECTION = true; // Set to true to enable
+        const ADMIN_PASSWORD = 'masjid2025'; // CHANGE THIS PASSWORD!
+        
+        // Simple password protection
+        function checkAuth() {
+            if (!ENABLE_PASSWORD_PROTECTION) return true;
+            
+            const stored = sessionStorage.getItem('admin_authenticated');
+            if (stored === 'true') return true;
+            
+            const password = prompt('Enter password to access prayer times:');
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('admin_authenticated', 'true');
+                return true;
+            }
+            
+            alert('Access denied. Incorrect password.');
+            window.location.href = '/';
+            return false;
+        }
+        
+        // Check authentication on page load
+        if (!checkAuth()) {
+            document.body.innerHTML = '<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f1c2e] via-[#1a2d47] to-[#213655]"><div class="text-center"><h1 class="text-3xl font-bold text-white mb-4">Access Denied</h1><p class="text-white/70">Invalid password. Redirecting...</p></div></div>';
+            setTimeout(() => window.location.href = '/', 2000);
+        }
+
         const { useState, useEffect, useCallback, useMemo } = React;
 
         // ==================== CONFIGURATION ====================
@@ -176,8 +209,20 @@
             method: 3,
             hadithSheetUrl: null,
             iqamahOffset: { Fajr: 20, Dhuhr: 15, Asr: 15, Maghrib: 5, Isha: 15 },
-            announcements: ["Jummah Prayer at 1:30 PM", "Islamic Classes - Sunday after Dhuhr", "Support Your Masjid - JazakAllah Khair"]
+            announcements: ["Jummah Prayer at 1:30 PM", "Islamic Classes - Sunday after Dhuhr", "Support Your Masjid - JazakAllah Khair"],
+            // TV Display Settings
+            tvMode: true,  // Enable TV-optimized layout (larger text, better spacing)
+            allowScrolling: false,  // Set to true if content doesn't fit on TV (allows scrolling)
+            compactLayout: false,  // Set to true to reduce spacing for smaller TVs
+            showHadith: true  // Set to false to hide hadith section if it doesn't fit
         };
+        
+        // TV Mode Toggle - Store in localStorage for persistence
+        const TV_MODE_KEY = 'tv_mode_setting';
+        const savedTvMode = localStorage.getItem(TV_MODE_KEY);
+        if (savedTvMode !== null) {
+            CONFIG.tvMode = savedTvMode === 'true';
+        }
 
         // ==================== STORAGE HELPERS ====================
         const STORAGE_KEYS = {
@@ -527,6 +572,19 @@
                 };
                 const refreshTimer = scheduleRefresh();
                 
+                // Global TV Mode toggle (works everywhere, even in production)
+                const handleTvModeToggle = (e) => {
+                    // Only trigger on 'T' key, and make sure we're not in an input field
+                    if ((e.key === 't' || e.key === 'T') && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                        e.preventDefault();
+                        CONFIG.tvMode = !CONFIG.tvMode;
+                        localStorage.setItem('tv_mode_setting', CONFIG.tvMode.toString());
+                        console.log('TV Mode toggled:', CONFIG.tvMode ? 'ON (Large Text)' : 'OFF (Small Text)');
+                        window.location.reload();
+                    }
+                };
+                window.addEventListener('keydown', handleTvModeToggle);
+                
                 // Keyboard shortcuts for preview mode (disabled in production)
                 const handleKeyPress = (e) => {
                     if (CONFIG.productionMode) return; // Disable in production
@@ -555,6 +613,7 @@
                     clearInterval(clockTimer);
                     clearTimeout(refreshTimer);
                     window.removeEventListener('keydown', handleKeyPress);
+                    window.removeEventListener('keydown', handleTvModeToggle);
                 };
             }, [fetchPrayerTimes]);
 
@@ -710,6 +769,20 @@
                 return () => clearInterval(hadithTimer);
             }, [hadiths.length]);
 
+            // Apply scroll settings to body
+            useEffect(() => {
+                if (CONFIG.allowScrolling) {
+                    document.body.classList.remove('no-scroll');
+                    document.body.classList.add('allow-scroll');
+                } else {
+                    document.body.classList.remove('allow-scroll');
+                    document.body.classList.add('no-scroll');
+                }
+                return () => {
+                    document.body.classList.remove('no-scroll', 'allow-scroll');
+                };
+            }, []);
+
             if (loading) {
                 return (
                     <div className="min-h-screen flex items-center justify-center" style={{background: 'linear-gradient(135deg, #0f1c2e 0%, #213655 100%)'}}>
@@ -724,7 +797,7 @@
             }
 
             return (
-                <div className="min-h-screen p-8 md:p-10 flex flex-col relative overflow-hidden" style={{background: 'linear-gradient(135deg, #0f1c2e 0%, #1a2d47 30%, #213655 60%, #0f1c2e 100%)'}}>
+                <div className={`min-h-screen ${CONFIG.compactLayout ? 'p-4 md:p-6' : 'p-6 md:p-8 lg:p-10'} flex flex-col relative ${CONFIG.allowScrolling ? '' : 'overflow-hidden'}`} style={{background: 'linear-gradient(135deg, #0f1c2e 0%, #1a2d47 30%, #213655 60%, #0f1c2e 100%)'}}>
                     
                     {/* Background */}
                     <div className="islamic-pattern"></div>
@@ -763,9 +836,24 @@
                     {/* Keyboard hints - Hidden in production */}
                     {!CONFIG.productionMode && !previewPrayer && !previewSeason && (
                         <div className="absolute bottom-4 right-4 z-30 text-white/20 text-xs">
-                            1-5 preview • S season
+                            1-5 preview • S season • T toggle TV mode
                         </div>
                     )}
+                    
+                    {/* TV Mode Indicator - Always visible for testing */}
+                    <div className="absolute top-4 right-4 z-30 glass-card px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-white/10 transition-colors" 
+                         onClick={() => {
+                             CONFIG.tvMode = !CONFIG.tvMode;
+                             localStorage.setItem('tv_mode_setting', CONFIG.tvMode.toString());
+                             window.location.reload();
+                         }}
+                         title="Click to toggle TV Mode (or press T)">
+                        <div className={`w-3 h-3 rounded-full ${CONFIG.tvMode ? 'bg-green-400' : 'bg-gray-400'}`}></div>
+                        <span className="text-white/80 text-xs font-medium">
+                            TV Mode: {CONFIG.tvMode ? 'ON (Large)' : 'OFF (Small)'}
+                        </span>
+                        <span className="text-white/40 text-xs">Click or Press T</span>
+                    </div>
 
                     {/* Announcement Banner */}
                     <div className="absolute top-0 left-0 right-0 bg-[#0a1628]/90 py-2 border-b border-[#66e1dc]/10 z-20 scroll-container">
@@ -780,40 +868,40 @@
                     <div className="relative z-10 max-w-[1600px] mx-auto w-full flex-1 flex flex-col pt-8">
                         
                         {/* Header */}
-                        <div className="text-center mb-6">
+                        <div className={`text-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4 md:mb-6'}`}>
                             <div className="inline-flex flex-col items-center">
-                                <p className="text-white/50 text-base arabic-font mb-4 tracking-wide">{CONFIG.bismillah}</p>
-                                <div className="mb-3 float-animation flex justify-center"><Icons.Mosque size={60} /></div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-white tracking-[0.12em] mb-1">{CONFIG.mosqueName}</h1>
-                                <p className="text-[#66e1dc]/60 text-lg arabic-font mb-2">{CONFIG.mosqueArabic}</p>
+                                <p className={`text-white/50 ${CONFIG.tvMode ? 'text-sm md:text-base lg:text-lg' : 'text-base'} arabic-font ${CONFIG.compactLayout ? 'mb-2' : 'mb-3 md:mb-4'} tracking-wide`}>{CONFIG.bismillah}</p>
+                                <div className={`${CONFIG.compactLayout ? 'mb-2' : 'mb-3'} float-animation flex justify-center`}><Icons.Mosque size={CONFIG.compactLayout ? 50 : CONFIG.tvMode ? 70 : 60} /></div>
+                                <h1 className={`${CONFIG.tvMode ? 'text-5xl md:text-6xl lg:text-7xl' : 'text-3xl md:text-4xl'} font-bold text-white tracking-[0.12em] mb-1`}>{CONFIG.mosqueName}</h1>
+                                <p className={`text-[#66e1dc]/60 ${CONFIG.tvMode ? 'text-xl md:text-2xl' : 'text-lg'} arabic-font ${CONFIG.compactLayout ? 'mb-1' : 'mb-2'}`}>{CONFIG.mosqueArabic}</p>
                                 <div className="h-[2px] w-28 bg-gradient-to-r from-transparent via-[#66e1dc] to-transparent"></div>
-                                {isJummah && <div className="mt-3 px-4 py-1.5 jummah-badge rounded-full"><span className="text-[#0a1628] text-xs font-bold tracking-widest">✨ JUMMAH MUBARAK ✨</span></div>}
+                                {isJummah && <div className={`${CONFIG.compactLayout ? 'mt-2' : 'mt-3'} px-4 py-1.5 jummah-badge rounded-full`}><span className={`text-[#0a1628] ${CONFIG.tvMode ? 'text-sm md:text-base' : 'text-xs'} font-bold tracking-widest`}>✨ JUMMAH MUBARAK ✨</span></div>}
                             </div>
                         </div>
 
                         {/* Clock */}
-                        <div className="text-center mb-4">
-                            <div className="text-white text-7xl md:text-8xl lg:text-9xl font-light tracking-tight mb-2" style={{textShadow: '0 4px 30px rgba(0,0,0,0.4)'}}>{formatTime()}</div>
-                            <div className="text-white/70 text-base md:text-lg">{formatDate()}</div>
-                            <div className="text-[#66e1dc] text-sm md:text-base mt-1">{formatHijri()}</div>
+                        <div className={`text-center ${CONFIG.compactLayout ? 'mb-2' : 'mb-3 md:mb-4'}`}>
+                            <div className={`text-white ${CONFIG.tvMode ? 'text-8xl md:text-9xl lg:text-[12rem]' : 'text-7xl md:text-8xl lg:text-9xl'} font-light tracking-tight mb-2`} style={{textShadow: '0 4px 30px rgba(0,0,0,0.4)'}}>{formatTime()}</div>
+                            <div className={`text-white/70 ${CONFIG.tvMode ? 'text-lg md:text-xl lg:text-2xl' : 'text-base md:text-lg'}`}>{formatDate()}</div>
+                            <div className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-base md:text-lg lg:text-xl' : 'text-sm md:text-base'} mt-1`}>{formatHijri()}</div>
                         </div>
 
                         {/* Countdown */}
                         {countdown && (
-                            <div className="text-center mb-6">
-                                <div className="inline-flex items-center gap-3 px-5 py-2 glass-card rounded-xl">
-                                    <span className="text-white/50 text-xs uppercase tracking-wider">Next Prayer</span>
-                                    <span className="text-[#66e1dc] font-medium">{countdown.name}</span>
+                            <div className={`text-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4 md:mb-6'}`}>
+                                <div className={`inline-flex items-center gap-3 ${CONFIG.compactLayout ? 'px-4 py-1.5' : 'px-5 py-2'} glass-card rounded-xl`}>
+                                    <span className={`text-white/50 ${CONFIG.tvMode ? 'text-sm md:text-base' : 'text-xs'} uppercase tracking-wider`}>Next Prayer</span>
+                                    <span className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-base md:text-lg' : ''} font-medium`}>{countdown.name}</span>
                                     <span className="text-white/30">|</span>
-                                    <span className="text-[#66e1dc] font-bold">{countdown.hours > 0 ? `${countdown.hours}h ` : ''}{countdown.minutes}m</span>
+                                    <span className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-lg md:text-xl' : ''} font-bold`}>{countdown.hours > 0 ? `${countdown.hours}h ` : ''}{countdown.minutes}m</span>
                                 </div>
                             </div>
                         )}
 
                         {/* Prayer Cards */}
                         {prayerTimes && prayerTimes.length > 0 && (
-                        <div className="flex-1 flex items-center mb-6">
-                            <div className="grid grid-cols-5 gap-3 md:gap-5 w-full max-w-[1400px] mx-auto">
+                        <div className={`flex-1 flex items-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4 md:mb-6'}`}>
+                            <div className={`grid grid-cols-5 ${CONFIG.compactLayout ? 'gap-2 md:gap-3' : 'gap-3 md:gap-4 lg:gap-5'} w-full max-w-[1400px] mx-auto`}>
                                 {prayerTimes.map((prayer) => {
                                     if (!prayer || !prayer.name) return null;
                                     const isActive = prayer.name === activePrayer;
@@ -836,24 +924,24 @@
                                             onClick={() => !CONFIG.productionMode && setPreviewPrayer(previewPrayer === prayer.name ? null : prayer.name)}
                                             title={!CONFIG.productionMode ? `Click to preview ${prayer.name} theme` : ''}
                                         >
-                                            <div className={`relative rounded-2xl p-4 md:p-6 transition-all duration-500 overflow-hidden ${isActive && colors ? `bg-gradient-to-br ${colors.gradient} active-card` : 'glass-card'}`}>
+                                            <div className={`relative rounded-2xl ${CONFIG.compactLayout ? 'p-3 md:p-4' : 'p-4 md:p-5 lg:p-6'} transition-all duration-500 overflow-hidden ${isActive && colors ? `bg-gradient-to-br ${colors.gradient} active-card` : 'glass-card'}`}>
                                                 {isActive && <div className="absolute inset-0 shimmer-effect"></div>}
                                                 {isActive && <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent"></div>}
                                                 
-                                                <div className="flex justify-center mb-3 relative z-10">
-                                                    <div className={`p-3 rounded-xl ${isActive ? 'bg-white/30' : 'bg-[#0f1c2e]/50 border border-white/10'}`}>
-                                                        {IconComp && <IconComp size={28} className={isActive ? 'text-white' : 'text-[#66e1dc]'} />}
+                                                <div className={`flex justify-center ${CONFIG.compactLayout ? 'mb-2' : 'mb-3'} relative z-10`}>
+                                                    <div className={`${CONFIG.compactLayout ? 'p-2' : 'p-3'} rounded-xl ${isActive ? 'bg-white/30' : 'bg-[#0f1c2e]/50 border border-white/10'}`}>
+                                                        {IconComp && <IconComp size={CONFIG.tvMode ? (CONFIG.compactLayout ? 24 : 32) : 28} className={isActive ? 'text-white' : 'text-[#66e1dc]'} />}
                                                     </div>
                                                 </div>
                                                 
-                                                <div className="text-center mb-2 relative z-10">
-                                                    <div className={`text-sm md:text-base font-semibold ${isActive ? 'text-white' : 'text-white/90'}`}>{prayer.name}</div>
-                                                    <div className={`text-lg md:text-xl arabic-font ${isActive ? 'text-white/90' : 'text-white/60'}`}>{prayer.arabicName}</div>
+                                                <div className={`text-center ${CONFIG.compactLayout ? 'mb-1' : 'mb-2'} relative z-10`}>
+                                                    <div className={`${CONFIG.tvMode ? 'text-base md:text-lg lg:text-xl' : 'text-sm md:text-base'} font-semibold ${isActive ? 'text-white' : 'text-white/90'}`}>{prayer.name}</div>
+                                                    <div className={`${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-lg md:text-xl'} arabic-font ${isActive ? 'text-white/90' : 'text-white/60'}`}>{prayer.arabicName}</div>
                                                 </div>
                                                 
-                                                <div className={`text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-1 relative z-10 ${isActive ? 'text-white' : 'text-white'}`}>{formatTime12Hour(prayer.time)}</div>
+                                                <div className={`${CONFIG.tvMode ? 'text-4xl md:text-5xl lg:text-6xl xl:text-7xl' : 'text-3xl md:text-4xl lg:text-5xl'} font-bold text-center mb-1 relative z-10 ${isActive ? 'text-white' : 'text-white'}`}>{formatTime12Hour(prayer.time)}</div>
                                                 
-                                                <div className={`text-center text-xs relative z-10 ${isActive ? 'text-white/70' : 'text-[#66e1dc]/60'}`}>Iqamah: {getIqamahTime(prayer.name, prayer.time)}</div>
+                                                <div className={`text-center ${CONFIG.tvMode ? 'text-sm md:text-base' : 'text-xs'} relative z-10 ${isActive ? 'text-white/70' : 'text-[#66e1dc]/60'}`}>Iqamah: {formatTime12Hour(getIqamahTime(prayer.name, prayer.time))}</div>
                                                 
                                                 {isActive && (
                                                     <div className="flex justify-center mt-2 relative z-10">
@@ -885,19 +973,19 @@
                         )}
 
                         {/* Hadith */}
-                        {hadiths.length > 0 && currentHadithIndex >= 0 && currentHadithIndex < hadiths.length && hadiths[currentHadithIndex] && (
-                            <div className="max-w-4xl mx-auto w-full">
-                                <div className="glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden">
+                        {CONFIG.showHadith && hadiths.length > 0 && currentHadithIndex >= 0 && currentHadithIndex < hadiths.length && hadiths[currentHadithIndex] && (
+                            <div className={`max-w-4xl mx-auto w-full ${CONFIG.compactLayout ? 'mb-2' : 'mb-4'}`}>
+                                <div className={`glass-card rounded-2xl ${CONFIG.compactLayout ? 'p-4 md:p-5' : 'p-5 md:p-6 lg:p-8'} relative overflow-hidden`}>
                                     <div className="absolute inset-0 shimmer-effect opacity-20"></div>
-                                    <div className="text-center mb-4 relative z-10">
-                                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] rounded-full">
-                                            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                                            <span className="text-[#0f1c2e] text-xs font-bold tracking-widest">{hadiths[currentHadithIndex]?.source?.toUpperCase() || 'HADITH'}</span>
+                                    <div className={`text-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4'} relative z-10`}>
+                                        <div className={`inline-flex items-center gap-2 ${CONFIG.compactLayout ? 'px-3 py-1' : 'px-4 py-1.5'} bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] rounded-full`}>
+                                            <div className={`${CONFIG.tvMode ? 'w-2.5 h-2.5' : 'w-2 h-2'} bg-white rounded-full animate-pulse`}></div>
+                                            <span className={`text-[#0f1c2e] ${CONFIG.tvMode ? 'text-sm md:text-base' : 'text-xs'} font-bold tracking-widest`}>{hadiths[currentHadithIndex]?.source?.toUpperCase() || 'HADITH'}</span>
                                         </div>
                                     </div>
-                                    <p className="text-white/90 text-lg md:text-xl text-center italic relative z-10">"{hadiths[currentHadithIndex]?.text || ''}"</p>
-                                    <div className="flex justify-center gap-2 mt-4 relative z-10">
-                                        {hadiths.map((_, i) => <button key={i} onClick={() => setCurrentHadithIndex(i)} className={`h-2 rounded-full transition-all ${i === currentHadithIndex ? 'w-10 bg-[#66e1dc]' : 'w-2 bg-white/30'}`}/>)}
+                                    <p className={`text-white/90 ${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-lg md:text-xl'} text-center italic relative z-10`}>"{hadiths[currentHadithIndex]?.text || ''}"</p>
+                                    <div className={`flex justify-center gap-2 ${CONFIG.compactLayout ? 'mt-3' : 'mt-4'} relative z-10`}>
+                                        {hadiths.map((_, i) => <button key={i} onClick={() => setCurrentHadithIndex(i)} className={`${CONFIG.tvMode ? 'h-2.5' : 'h-2'} rounded-full transition-all ${i === currentHadithIndex ? `w-10 ${CONFIG.tvMode ? 'md:w-12' : ''} bg-[#66e1dc]` : `${CONFIG.tvMode ? 'w-2.5' : 'w-2'} bg-white/30`}`}/>)}
                                     </div>
                                 </div>
                             </div>

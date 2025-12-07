@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Settings Test - Prayer Times</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">TV Display Settings Test</h1>
+        
+        <div class="bg-gray-800 rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Current Settings in index.html</h2>
+            <div class="space-y-2 font-mono text-sm">
+                <div><span class="text-green-400">tvMode:</span> <span class="text-yellow-400">true</span> - Larger text for TV viewing</div>
+                <div><span class="text-green-400">allowScrolling:</span> <span class="text-yellow-400">false</span> - No scrolling (everything fits)</div>
+                <div><span class="text-green-400">compactLayout:</span> <span class="text-yellow-400">false</span> - Normal spacing</div>
+                <div><span class="text-green-400">showHadith:</span> <span class="text-yellow-400">true</span> - Show hadith section</div>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">How to See the Changes</h2>
+            <ol class="list-decimal list-inside space-y-3 text-gray-300">
+                <li><strong class="text-white">Start the server:</strong> Double-click <code class="bg-gray-700 px-2 py-1 rounded">serve.bat</code> or run <code class="bg-gray-700 px-2 py-1 rounded">python serve.py</code></li>
+                <li><strong class="text-white">Open browser:</strong> Go to <code class="bg-gray-700 px-2 py-1 rounded">http://localhost:8000/index.html</code></li>
+                <li><strong class="text-white">Enter password:</strong> <code class="bg-gray-700 px-2 py-1 rounded">masjid2024</code></li>
+                <li><strong class="text-white">Compare sizes:</strong> The text should be larger than before (tvMode is ON)</li>
+            </ol>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Quick Test: Toggle tvMode</h2>
+            <div class="bg-gray-700 rounded p-4 mb-4">
+                <p class="text-sm mb-2">1. Open <code class="bg-gray-600 px-2 py-1 rounded">index.html</code> in a text editor</p>
+                <p class="text-sm mb-2">2. Find line 214: <code class="bg-gray-600 px-2 py-1 rounded">tvMode: true,</code></p>
+                <p class="text-sm mb-2">3. Change to: <code class="bg-gray-600 px-2 py-1 rounded">tvMode: false,</code></p>
+                <p class="text-sm mb-2">4. Save and refresh browser</p>
+                <p class="text-sm text-yellow-400">→ You'll see text gets smaller!</p>
+            </div>
+            <div class="bg-gray-700 rounded p-4">
+                <p class="text-sm mb-2">Change it back to <code class="bg-gray-600 px-2 py-1 rounded">tvMode: true,</code></p>
+                <p class="text-sm text-yellow-400">→ Text gets larger again!</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">What Changed (tvMode: true)</h2>
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                    <span class="text-gray-300">Clock Size:</span>
+                    <span class="text-green-400">text-8xl → text-[12rem] (HUGE!)</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                    <span class="text-gray-300">Prayer Times:</span>
+                    <span class="text-green-400">text-4xl → text-7xl (Much larger)</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                    <span class="text-gray-300">Mosque Name:</span>
+                    <span class="text-green-400">text-5xl → text-7xl (Larger)</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                    <span class="text-gray-300">Hadith Text:</span>
+                    <span class="text-green-400">text-xl → text-3xl (Much larger)</span>
+                </div>
+                <div class="flex justify-between items-center pb-2">
+                    <span class="text-gray-300">Mosque Icon:</span>
+                    <span class="text-green-400">60px → 70px (Bigger)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 text-center">
+            <a href="http://localhost:8000/index.html" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg inline-block font-semibold">
+                Open Prayer Times Display →
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+

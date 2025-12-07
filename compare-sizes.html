@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Size Comparison - TV Mode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, sans-serif; }
+        .comparison-box {
+            border: 2px solid #66e1dc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center">TV Mode Size Comparison</h1>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- TV Mode OFF -->
+            <div class="comparison-box bg-gray-800">
+                <h2 class="text-2xl font-bold mb-4 text-red-400">TV Mode: OFF</h2>
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Clock:</p>
+                        <div class="text-7xl md:text-8xl lg:text-9xl font-light text-white">12:34</div>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Prayer Time:</p>
+                        <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">05:30 AM</div>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Mosque Name:</p>
+                        <div class="text-3xl md:text-4xl font-bold text-white">MASJID SHKUP</div>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Hadith Text:</p>
+                        <div class="text-lg md:text-xl italic text-white/90">"The covenant between us and them is prayer..."</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TV Mode ON -->
+            <div class="comparison-box bg-gray-800 border-green-400">
+                <h2 class="text-2xl font-bold mb-4 text-green-400">TV Mode: ON ✨</h2>
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Clock:</p>
+                        <div class="text-8xl md:text-9xl lg:text-[12rem] font-light text-white">12:34</div>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Prayer Time:</p>
+                        <div class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white">05:30 AM</div>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Mosque Name:</p>
+                        <div class="text-5xl md:text-6xl lg:text-7xl font-bold text-white">MASJID SHKUP</div>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm mb-2">Hadith Text:</p>
+                        <div class="text-xl md:text-2xl lg:text-3xl italic text-white/90">"The covenant between us and them is prayer..."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 bg-blue-900/30 border border-blue-500 rounded-lg p-6">
+            <h3 class="text-xl font-bold mb-4">How to Test:</h3>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+                <li>Open <code class="bg-gray-700 px-2 py-1 rounded">index.html</code> in your browser</li>
+                <li>Press <kbd class="bg-gray-700 px-2 py-1 rounded">T</kbd> key to toggle TV mode</li>
+                <li>Watch the text sizes change instantly!</li>
+                <li>Or manually change line 214 in <code class="bg-gray-700 px-2 py-1 rounded">index.html</code> from <code class="bg-gray-700 px-2 py-1 rounded">tvMode: true</code> to <code class="bg-gray-700 px-2 py-1 rounded">tvMode: false</code></li>
+            </ol>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <a href="http://localhost:8000/index.html" class="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-lg inline-block font-semibold text-lg">
+                Open Prayer Times Display →
+            </a>
+        </div>
+        
+        <div class="mt-8 bg-yellow-900/30 border border-yellow-500 rounded-lg p-6">
+            <h3 class="text-lg font-bold mb-2 text-yellow-400">💡 Tip:</h3>
+            <p class="text-gray-300">
+                The difference is most noticeable on larger screens. If you're on a small laptop screen, 
+                try zooming out (Ctrl + -) to see the full layout, or test on a TV/monitor.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+

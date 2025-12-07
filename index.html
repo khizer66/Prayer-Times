@@ -537,6 +537,151 @@
                 };
             }, [fetchPrayerTimes]);
 
+            // Load hadiths from localStorage or Google Sheets
+            const loadHadiths = useCallback(async () => {
+                try {
+                    // First, check for Google Sheets URL
+                    const sheetUrl = localStorage.getItem('masjid_sheet_url');
+                    if (sheetUrl && sheetUrl.trim()) {
+                        try {
+                            const response = await fetch(sheetUrl);
+                            if (response.ok) {
+                                const csvText = await response.text();
+                                // Proper CSV parsing that handles escaped quotes and newlines within quoted fields
+                                // Must parse entire text character-by-character to handle multiline quoted fields
+                                const parseCSV = (text) => {
+                                    const rows = [];
+                                    let currentRow = [];
+                                    let currentField = '';
+                                    let inQuotes = false;
+                                    
+                                    for (let i = 0; i < text.length; i++) {
+                                        const char = text[i];
+                                        const nextChar = text[i + 1];
+                                        
+                                        if (char === '"') {
+                                            if (inQuotes && nextChar === '"') {
+                                                // Escaped quote (doubled quote)
+                                                currentField += '"';
+                                                i++; // Skip next quote
+                                            } else {
+                                                // Toggle quote state
+                                                inQuotes = !inQuotes;
+                                            }
+                                        } else if (char === ',' && !inQuotes) {
+                                            // Field separator (only outside quotes)
+                                            currentRow.push(currentField);
+                                            currentField = '';
+                                        } else if ((char === '\n' || (char === '\r' && nextChar !== '\n')) && !inQuotes) {
+                                            // Row separator (only outside quotes)
+                                            // Handle \r\n as single newline
+                                            if (char === '\r' && nextChar === '\n') {
+                                                i++; // Skip \n
+                                            }
+                                            currentRow.push(currentField);
+                                            if (currentRow.length > 0 && currentRow.some(f => f.trim())) {
+                                                rows.push(currentRow);
+                                            }
+                                            currentRow = [];
+                                            currentField = '';
+                                        } else {
+                                            // Regular character (including newlines inside quoted fields)
+                                            currentField += char;
+                                        }
+                                    }
+                                    
+                                    // Add last field and row if not empty
+                                    if (currentField || currentRow.length > 0) {
+                                        currentRow.push(currentField);
+                                        if (currentRow.length > 0 && currentRow.some(f => f.trim())) {
+                                            rows.push(currentRow);
+                                        }
+                                    }
+                                    
+                                    return rows;
+                                };
+                                
+                                const rows = parseCSV(csvText);
+                                if (rows.length > 1) {
+                                    // Skip header row, parse CSV
+                                    const parsedHadiths = rows.slice(1).map(row => {
+                                        if (row.length >= 2) {
+                                            return {
+                                                text: row[0].trim(),
+                                                source: row[1].trim()
+                                            };
+                                        }
+                                        return null;
+                                    }).filter(h => h && h.text);
+                                    
+                                    if (parsedHadiths.length > 0) {
+                                        setHadiths(parsedHadiths);
+                                        // Reset index if out of bounds
+                                        setCurrentHadithIndex(0);
+                                        return;
+                                    }
+                                }
+                            }
+                        } catch (err) {
+                            console.warn('Failed to fetch from Google Sheets:', err);
+                            // Fall through to localStorage check
+                        }
+                    }
+                    
+                    // If no Google Sheets or fetch failed, check localStorage
+                    const savedHadiths = localStorage.getItem('masjid_hadiths');
+                    if (savedHadiths) {
+                        try {
+                            const parsed = JSON.parse(savedHadiths);
+                            if (Array.isArray(parsed) && parsed.length > 0) {
+                                setHadiths(parsed);
+                                // Reset index if out of bounds
+                                setCurrentHadithIndex(0);
+                                return;
+                            }
+                        } catch (err) {
+                            console.warn('Failed to parse saved hadiths:', err);
+                        }
+                    }
+                    
+                    // If neither exists, keep defaultHadiths (already set in useState)
+                } catch (err) {
+                    console.error('Error loading hadiths:', err);
+                }
+            }, []);
+
+            useEffect(() => {
+                // Load hadiths on mount
+                loadHadiths();
+                
+                // Listen for storage events (when admin panel updates hadiths in another tab)
+                const handleStorageChange = (e) => {
+                    if (e.key === 'masjid_hadiths' || e.key === 'masjid_sheet_url') {
+                        loadHadiths();
+                    }
+                };
+                
+                window.addEventListener('storage', handleStorageChange);
+                
+                // Also listen for custom event (for same-tab updates)
+                const handleCustomStorage = () => {
+                    loadHadiths();
+                };
+                window.addEventListener('hadithsUpdated', handleCustomStorage);
+                
+                return () => {
+                    window.removeEventListener('storage', handleStorageChange);
+                    window.removeEventListener('hadithsUpdated', handleCustomStorage);
+                };
+            }, [loadHadiths]);
+
+            // Clamp currentHadithIndex when hadiths array changes
+            useEffect(() => {
+                if (hadiths.length > 0 && currentHadithIndex >= hadiths.length) {
+                    setCurrentHadithIndex(0);
+                }
+            }, [hadiths.length, currentHadithIndex]);
+
             useEffect(() => {
                 const hadithTimer = setInterval(() => setCurrentHadithIndex(i => (i + 1) % hadiths.length), 12000);
                 return () => clearInterval(hadithTimer);
@@ -699,21 +844,23 @@
                         )}
 
                         {/* Hadith */}
-                        <div className="max-w-4xl mx-auto w-full">
-                            <div className="glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden">
-                                <div className="absolute inset-0 shimmer-effect opacity-20"></div>
-                                <div className="text-center mb-4 relative z-10">
-                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] rounded-full">
-                                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                                        <span className="text-[#0f1c2e] text-xs font-bold tracking-widest">{hadiths[currentHadithIndex].source.toUpperCase()}</span>
+                        {hadiths.length > 0 && currentHadithIndex < hadiths.length && (
+                            <div className="max-w-4xl mx-auto w-full">
+                                <div className="glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden">
+                                    <div className="absolute inset-0 shimmer-effect opacity-20"></div>
+                                    <div className="text-center mb-4 relative z-10">
+                                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] rounded-full">
+                                            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                            <span className="text-[#0f1c2e] text-xs font-bold tracking-widest">{hadiths[currentHadithIndex].source.toUpperCase()}</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-white/90 text-lg md:text-xl text-center italic relative z-10">"{hadiths[currentHadithIndex].text}"</p>
+                                    <div className="flex justify-center gap-2 mt-4 relative z-10">
+                                        {hadiths.map((_, i) => <button key={i} onClick={() => setCurrentHadithIndex(i)} className={`h-2 rounded-full transition-all ${i === currentHadithIndex ? 'w-10 bg-[#66e1dc]' : 'w-2 bg-white/30'}`}/>)}
                                     </div>
                                 </div>
-                                <p className="text-white/90 text-lg md:text-xl text-center italic relative z-10">"{hadiths[currentHadithIndex].text}"</p>
-                                <div className="flex justify-center gap-2 mt-4 relative z-10">
-                                    {hadiths.map((_, i) => <button key={i} onClick={() => setCurrentHadithIndex(i)} className={`h-2 rounded-full transition-all ${i === currentHadithIndex ? 'w-10 bg-[#66e1dc]' : 'w-2 bg-white/30'}`}/>)}
-                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             );

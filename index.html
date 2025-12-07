@@ -254,11 +254,21 @@
             } catch { return ''; }
         };
 
+        // Convert 24-hour time string to 12-hour format
+        const formatTime12Hour = (time24) => {
+            const [h, m] = time24.split(':').map(Number);
+            const hours = h % 12 || 12; // Convert 0 to 12, 13 to 1, etc.
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            return `${hours}:${String(m).padStart(2, '0')} ${ampm}`;
+        };
+
         const getIqamahTime = (prayerName, adhanTime) => {
             const [h, m] = adhanTime.split(':').map(Number);
             const offset = CONFIG.iqamahOffset[prayerName] || 15;
             const totalMins = h * 60 + m + offset;
-            return `${String(Math.floor(totalMins / 60) % 24).padStart(2, '0')}:${String(totalMins % 60).padStart(2, '0')}`;
+            const newH = Math.floor(totalMins / 60) % 24;
+            const newM = totalMins % 60;
+            return formatTime12Hour(`${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`);
         };
 
         const getSeason = () => {
@@ -841,7 +851,7 @@
                                                     <div className={`text-lg md:text-xl arabic-font ${isActive ? 'text-white/90' : 'text-white/60'}`}>{prayer.arabicName}</div>
                                                 </div>
                                                 
-                                                <div className={`text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-1 relative z-10 ${isActive ? 'text-white' : 'text-white'}`}>{prayer.time}</div>
+                                                <div className={`text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-1 relative z-10 ${isActive ? 'text-white' : 'text-white'}`}>{formatTime12Hour(prayer.time)}</div>
                                                 
                                                 <div className={`text-center text-xs relative z-10 ${isActive ? 'text-white/70' : 'text-[#66e1dc]/60'}`}>Iqamah: {getIqamahTime(prayer.name, prayer.time)}</div>
                                                 

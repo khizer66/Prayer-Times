@@ -61,6 +61,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip external CDN resources - let browser handle them
+  const url = new URL(event.request.url);
+  const isExternal = url.origin !== self.location.origin;
+  if (isExternal) {
+    // For external resources, just fetch from network (don't cache)
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // For other requests, try cache first, then network
   event.respondWith(
     caches.match(event.request)

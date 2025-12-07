@@ -433,8 +433,13 @@
             const fetchPrayerTimes = useCallback(async () => {
                 // Try to load from cache first
                 const cached = getCachedPrayerTimes();
-                if (cached) {
-                    setPrayerTimes(cached);
+                if (cached && cached.length > 0) {
+                    // Restore Icon components (lost during JSON serialization)
+                    const cachedWithIcons = cached.map(prayer => ({
+                        ...prayer,
+                        Icon: Icons[prayer.name] || Icons.Fajr
+                    }));
+                    setPrayerTimes(cachedWithIcons);
                     setLoading(false);
                     setError(null);
                 }
@@ -803,10 +808,14 @@
                                     if (!prayer || !prayer.name) return null;
                                     const isActive = prayer.name === activePrayer;
                                     const colors = getDynamicColors(prayer.name, season) || getDynamicColors('Fajr', season);
-                                    const IconComp = prayer.Icon || Icons[prayer.name] || Icons.Fajr;
+                                    // Ensure Icon is always defined - restore from Icons if missing
+                                    let IconComp = prayer.Icon;
+                                    if (!IconComp && typeof Icons !== 'undefined' && Icons) {
+                                        IconComp = Icons[prayer.name] || Icons.Fajr;
+                                    }
                                     
-                                    if (!IconComp) {
-                                        console.error('Icon component not found for prayer:', prayer.name);
+                                    if (!IconComp || typeof IconComp !== 'function') {
+                                        console.error('Icon component not found for prayer:', prayer.name, 'Available Icons:', typeof Icons !== 'undefined' ? Object.keys(Icons || {}) : 'undefined');
                                         return null;
                                     }
                                     
@@ -849,6 +858,7 @@
                                 })}
                             </div>
                         </div>
+                        )}
 
                         {/* Error Message */}
                         {error && (

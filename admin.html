@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masjid Admin Panel</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -113,6 +115,37 @@
     </div>
 
     <script>
+        // ==================== SECURITY CONFIGURATION ====================
+        // Set ENABLE_PASSWORD_PROTECTION to true to require a password
+        // Set ADMIN_PASSWORD to your desired password (change this!)
+        const ENABLE_PASSWORD_PROTECTION = false; // Set to true to enable
+        const ADMIN_PASSWORD = 'masjid2024'; // CHANGE THIS PASSWORD!
+        
+        // Simple password protection
+        function checkAuth() {
+            if (!ENABLE_PASSWORD_PROTECTION) return true;
+            
+            const stored = sessionStorage.getItem('admin_authenticated');
+            if (stored === 'true') return true;
+            
+            const password = prompt('Enter admin password to access the panel:');
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('admin_authenticated', 'true');
+                return true;
+            }
+            
+            alert('Access denied. Incorrect password.');
+            window.location.href = '/';
+            return false;
+        }
+        
+        // Check authentication on page load
+        if (!checkAuth()) {
+            document.body.innerHTML = '<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f1c2e] via-[#1a2d47] to-[#213655]"><div class="text-center"><h1 class="text-3xl font-bold text-white mb-4">Access Denied</h1><p class="text-white/70">Invalid password. Redirecting...</p></div></div>';
+            setTimeout(() => window.location.href = '/', 2000);
+        }
+        
+        // ==================== HADITH MANAGEMENT ====================
         // Default hadiths
         let hadiths = [
             { text: "Prayer is the pillar of religion and the key to Paradise.", source: "Hadith" },

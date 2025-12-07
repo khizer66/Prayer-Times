@@ -161,19 +161,6 @@
     <div id="root"></div>
     
     <script type="text/babel">
-        console.log('Script started, checking React...');
-        // Verify React is loaded
-        if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
-            console.error('React or ReactDOM not loaded!');
-            document.getElementById('root').innerHTML = `
-                <div style="padding: 20px; text-align: center; color: #66e1dc; background: #0f1c2e; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                    <h1 style="color: #ff6b6b; margin-bottom: 20px;">Error: React Not Loaded</h1>
-                    <p>Please check your internet connection and reload the page.</p>
-                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #66e1dc; color: #0f1c2e; border: none; border-radius: 5px; cursor: pointer;">Reload Page</button>
-                </div>
-            `;
-        } else {
-        console.log('React loaded, initializing app...');
         const { useState, useEffect, useCallback, useMemo } = React;
 
         // ==================== CONFIGURATION ====================
@@ -882,33 +869,57 @@
         };
 
         // Error boundary for React rendering
-        try {
-            const rootElement = document.getElementById('root');
-            if (!rootElement) {
-                throw new Error('Root element not found');
+        const renderApp = () => {
+            try {
+                // Check if React is loaded
+                if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+                    throw new Error('React or ReactDOM not loaded. Please check your internet connection.');
+                }
+
+                const rootElement = document.getElementById('root');
+                if (!rootElement) {
+                    throw new Error('Root element not found');
+                }
+                
+                // Use React 18 createRoot API (ReactDOM.render is deprecated)
+                if (ReactDOM.createRoot) {
+                    const root = ReactDOM.createRoot(rootElement);
+                    root.render(<MosquePrayerTimes />);
+                } else {
+                    // Fallback for older React versions
+                    ReactDOM.render(<MosquePrayerTimes />, rootElement);
+                }
+            } catch (error) {
+                console.error('React rendering error:', error);
+                const rootElement = document.getElementById('root');
+                if (rootElement) {
+                    rootElement.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #66e1dc; background: #0f1c2e; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                            <h1 style="color: #ff6b6b; margin-bottom: 20px;">Error Loading Prayer Times</h1>
+                            <p style="margin-bottom: 10px;">Please check the browser console for details.</p>
+                            <p style="font-size: 12px; color: #888;">Error: ${error.message}</p>
+                            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #66e1dc; color: #0f1c2e; border: none; border-radius: 5px; cursor: pointer;">Reload Page</button>
+                        </div>
+                    `;
+                }
             }
-            
-            // Use React 18 createRoot API (ReactDOM.render is deprecated)
-            if (ReactDOM.createRoot) {
-                const root = ReactDOM.createRoot(rootElement);
-                root.render(<MosquePrayerTimes />);
+        };
+
+        // Wait for React to load, then render
+        const waitForReact = () => {
+            if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined') {
+                renderApp();
             } else {
-                // Fallback for older React versions
-                ReactDOM.render(<MosquePrayerTimes />, rootElement);
+                // Retry after a short delay
+                setTimeout(waitForReact, 50);
             }
-        } catch (error) {
-            console.error('React rendering error:', error);
-            const rootElement = document.getElementById('root');
-            if (rootElement) {
-                rootElement.innerHTML = `
-                    <div style="padding: 20px; text-align: center; color: #66e1dc; background: #0f1c2e; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                        <h1 style="color: #ff6b6b; margin-bottom: 20px;">Error Loading Prayer Times</h1>
-                        <p style="margin-bottom: 10px;">Please check the browser console for details.</p>
-                        <p style="font-size: 12px; color: #888;">Error: ${error.message}</p>
-                        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #66e1dc; color: #0f1c2e; border: none; border-radius: 5px; cursor: pointer;">Reload Page</button>
-                    </div>
-                `;
-            }
+        };
+
+        // Start waiting for React
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', waitForReact);
+        } else {
+            waitForReact();
         }
 
         // Register Service Worker for offline support
@@ -923,7 +934,6 @@
                     });
             });
         }
-        } // End React check
     </script>
 </body>
 </html>

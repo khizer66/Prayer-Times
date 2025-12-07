@@ -270,6 +270,9 @@
         };
 
         const getDynamicColors = (prayerName, season) => {
+            if (!prayerName || !season) {
+                return { gradient: 'from-slate-950 via-indigo-950 to-slate-900', glow: 'rgba(51, 65, 85, 0.35)' };
+            }
             const colors = {
                 Fajr: { spring: { gradient: 'from-slate-950 via-indigo-950 to-slate-900', glow: 'rgba(51, 65, 85, 0.35)' }, summer: { gradient: 'from-gray-950 via-slate-900 to-indigo-950', glow: 'rgba(71, 85, 105, 0.35)' }, autumn: { gradient: 'from-slate-950 via-gray-900 to-slate-900', glow: 'rgba(51, 65, 85, 0.35)' }, winter: { gradient: 'from-slate-950 via-slate-900 to-indigo-950', glow: 'rgba(30, 41, 59, 0.35)' } },
                 Dhuhr: { spring: { gradient: 'from-amber-600 via-orange-600 to-yellow-600', glow: 'rgba(251, 191, 36, 0.35)' }, summer: { gradient: 'from-orange-600 via-amber-700 to-yellow-700', glow: 'rgba(245, 158, 11, 0.35)' }, autumn: { gradient: 'from-orange-700 via-amber-700 to-yellow-700', glow: 'rgba(217, 119, 6, 0.35)' }, winter: { gradient: 'from-amber-600 via-orange-600 to-yellow-600', glow: 'rgba(252, 211, 77, 0.35)' } },
@@ -415,13 +418,16 @@
                 return { name: prayerTimes[0].name, mins: h * 60 + m + 24 * 60 };
             }, [prayerTimes, skopjeTime.totalMinutes]);
 
-            const activePrayer = previewPrayer || getActivePrayer();
+            const activePrayer = previewPrayer || getActivePrayer() || null;
             const nextPrayer = getNextPrayer();
             const countdown = nextPrayer ? {
                 name: nextPrayer.name,
                 hours: Math.floor((nextPrayer.mins - skopjeTime.totalMinutes) / 60),
                 minutes: (nextPrayer.mins - skopjeTime.totalMinutes) % 60
             } : null;
+            
+            // Get colors for active prayer glow effect
+            const activePrayerColors = activePrayer ? getDynamicColors(activePrayer, season) : null;
 
             // Fetch prayer times
             const fetchPrayerTimes = useCallback(async () => {
@@ -709,16 +715,22 @@
                     <div className="islamic-pattern"></div>
                     
                     {/* Prayer-specific visual effects */}
-                    <Stars count={50} visible={activePrayer === 'Isha'} />
-                    <DawnGlow visible={activePrayer === 'Fajr'} />
-                    <SunRays visible={activePrayer === 'Dhuhr'} />
-                    <FloatingParticles visible={activePrayer === 'Asr'} />
-                    <SunsetClouds visible={activePrayer === 'Maghrib'} />
+                    {activePrayer && (
+                        <>
+                            <Stars count={50} visible={activePrayer === 'Isha'} />
+                            <DawnGlow visible={activePrayer === 'Fajr'} />
+                            <SunRays visible={activePrayer === 'Dhuhr'} />
+                            <FloatingParticles visible={activePrayer === 'Asr'} />
+                            <SunsetClouds visible={activePrayer === 'Maghrib'} />
+                        </>
+                    )}
                     
                     <div className="absolute inset-0 pointer-events-none">
                         <div className="absolute -top-40 -left-40 w-[800px] h-[800px] rounded-full blur-[150px] pulse-glow" style={{background: 'radial-gradient(circle, rgba(102, 225, 220, 0.15) 0%, transparent 70%)'}}></div>
                         <div className="absolute -bottom-40 -right-40 w-[800px] h-[800px] rounded-full blur-[150px] pulse-glow" style={{background: 'radial-gradient(circle, rgba(33, 54, 85, 0.4) 0%, transparent 70%)'}}></div>
-                        {activePrayer && <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full blur-[120px] pulse-glow transform -translate-x-1/2 -translate-y-1/2" style={{background: `radial-gradient(circle, ${getDynamicColors(activePrayer, season).glow} 0%, transparent 70%)`}}></div>}
+                        {activePrayer && activePrayerColors && activePrayerColors.glow && (
+                            <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full blur-[120px] pulse-glow transform -translate-x-1/2 -translate-y-1/2" style={{background: `radial-gradient(circle, ${activePrayerColors.glow} 0%, transparent 70%)`}}></div>
+                        )}
                     </div>
                     
                     {/* Preview Mode Indicator - Hidden in production */}
@@ -784,12 +796,19 @@
                         )}
 
                         {/* Prayer Cards */}
+                        {prayerTimes && prayerTimes.length > 0 && (
                         <div className="flex-1 flex items-center mb-6">
                             <div className="grid grid-cols-5 gap-3 md:gap-5 w-full max-w-[1400px] mx-auto">
                                 {prayerTimes.map((prayer) => {
+                                    if (!prayer || !prayer.name) return null;
                                     const isActive = prayer.name === activePrayer;
-                                    const colors = getDynamicColors(prayer.name, season);
-                                    const IconComp = prayer.Icon;
+                                    const colors = getDynamicColors(prayer.name, season) || getDynamicColors('Fajr', season);
+                                    const IconComp = prayer.Icon || Icons[prayer.name] || Icons.Fajr;
+                                    
+                                    if (!IconComp) {
+                                        console.error('Icon component not found for prayer:', prayer.name);
+                                        return null;
+                                    }
                                     
                                     return (
                                         <div 
@@ -798,13 +817,13 @@
                                             onClick={() => !CONFIG.productionMode && setPreviewPrayer(previewPrayer === prayer.name ? null : prayer.name)}
                                             title={!CONFIG.productionMode ? `Click to preview ${prayer.name} theme` : ''}
                                         >
-                                            <div className={`relative rounded-2xl p-4 md:p-6 transition-all duration-500 overflow-hidden ${isActive ? `bg-gradient-to-br ${colors.gradient} active-card` : 'glass-card'}`}>
+                                            <div className={`relative rounded-2xl p-4 md:p-6 transition-all duration-500 overflow-hidden ${isActive && colors ? `bg-gradient-to-br ${colors.gradient} active-card` : 'glass-card'}`}>
                                                 {isActive && <div className="absolute inset-0 shimmer-effect"></div>}
                                                 {isActive && <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent"></div>}
                                                 
                                                 <div className="flex justify-center mb-3 relative z-10">
                                                     <div className={`p-3 rounded-xl ${isActive ? 'bg-white/30' : 'bg-[#0f1c2e]/50 border border-white/10'}`}>
-                                                        <IconComp size={28} className={isActive ? 'text-white' : 'text-[#66e1dc]'} />
+                                                        {IconComp && <IconComp size={28} className={isActive ? 'text-white' : 'text-[#66e1dc]'} />}
                                                     </div>
                                                 </div>
                                                 
@@ -846,17 +865,17 @@
                         )}
 
                         {/* Hadith */}
-                        {hadiths.length > 0 && currentHadithIndex < hadiths.length && (
+                        {hadiths.length > 0 && currentHadithIndex >= 0 && currentHadithIndex < hadiths.length && hadiths[currentHadithIndex] && (
                             <div className="max-w-4xl mx-auto w-full">
                                 <div className="glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden">
                                     <div className="absolute inset-0 shimmer-effect opacity-20"></div>
                                     <div className="text-center mb-4 relative z-10">
                                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] rounded-full">
                                             <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                                            <span className="text-[#0f1c2e] text-xs font-bold tracking-widest">{hadiths[currentHadithIndex].source.toUpperCase()}</span>
+                                            <span className="text-[#0f1c2e] text-xs font-bold tracking-widest">{hadiths[currentHadithIndex]?.source?.toUpperCase() || 'HADITH'}</span>
                                         </div>
                                     </div>
-                                    <p className="text-white/90 text-lg md:text-xl text-center italic relative z-10">"{hadiths[currentHadithIndex].text}"</p>
+                                    <p className="text-white/90 text-lg md:text-xl text-center italic relative z-10">"{hadiths[currentHadithIndex]?.text || ''}"</p>
                                     <div className="flex justify-center gap-2 mt-4 relative z-10">
                                         {hadiths.map((_, i) => <button key={i} onClick={() => setCurrentHadithIndex(i)} className={`h-2 rounded-full transition-all ${i === currentHadithIndex ? 'w-10 bg-[#66e1dc]' : 'w-2 bg-white/30'}`}/>)}
                                     </div>
@@ -881,14 +900,9 @@
                     throw new Error('Root element not found');
                 }
                 
-                // Use React 18 createRoot API (ReactDOM.render is deprecated)
-                if (ReactDOM.createRoot) {
-                    const root = ReactDOM.createRoot(rootElement);
-                    root.render(<MosquePrayerTimes />);
-                } else {
-                    // Fallback for older React versions
-                    ReactDOM.render(<MosquePrayerTimes />, rootElement);
-                }
+                // Use ReactDOM.render (more compatible with Babel standalone)
+                // React 18 createRoot can cause issues with Babel's in-browser transpilation
+                ReactDOM.render(<MosquePrayerTimes />, rootElement);
             } catch (error) {
                 console.error('React rendering error:', error);
                 const rootElement = document.getElementById('root');

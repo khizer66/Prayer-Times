@@ -10,9 +10,106 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Outfit', sans-serif; }
+        
+        /* Custom Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            min-width: 320px;
+            max-width: 500px;
+            background: linear-gradient(135deg, #1a2d47 0%, #213655 100%);
+            border: 1px solid #66e1dc;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(102, 225, 220, 0.3);
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .notification.success {
+            border-color: #66e1dc;
+        }
+        
+        .notification.error {
+            border-color: #ef4444;
+        }
+        
+        .notification-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-content {
+            flex: 1;
+            color: white;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .notification-close {
+            flex-shrink: 0;
+            background: transparent;
+            border: none;
+            color: #66e1dc;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .notification-close:hover {
+            background: rgba(102, 225, 220, 0.1);
+            color: #4db8b3;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(400px);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .notification {
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+                max-width: none;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-[#0f1c2e] via-[#1a2d47] to-[#213655]">
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+    
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         
         <!-- Header -->
@@ -41,6 +138,176 @@
                 
                 <p class="mt-4"><strong class="text-[#66e1dc]">Option 2: Admin Panel (This Page)</strong></p>
                 <p class="ml-4">Use the editor below to add, edit, or remove hadiths. Changes are saved to your browser's localStorage.</p>
+            </div>
+        </div>
+
+        <!-- Language Settings -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-4">Display Language</h2>
+            <div class="flex items-center gap-4">
+                <label class="text-white/80">Select language for the prayer times display:</label>
+                <select 
+                    id="languageSelect" 
+                    onchange="saveLanguage()"
+                    class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-[#66e1dc]"
+                >
+                    <option value="sq">Albanian (Shqip)</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <p class="text-white/50 text-sm mt-2">This will change labels and prayer names on the main display</p>
+        </div>
+
+        <!-- Iqamah Offsets -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-4">Iqamah Time Offsets</h2>
+            <p class="text-white/60 text-sm mb-4">Set the delay (in minutes) between Adhan and Iqamah for each prayer</p>
+            <div class="space-y-4">
+                <!-- Fajr/Sabahu -->
+                <div class="flex items-center gap-4">
+                    <label class="text-white/80 w-32 text-sm">
+                        <span class="font-medium">Fajr</span> / <span class="text-[#66e1dc]">Sabahu</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="offsetFajr" 
+                        min="0" 
+                        max="60" 
+                        step="1"
+                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
+                    >
+                    <span class="text-white/60 text-sm">minutes</span>
+                </div>
+                
+                <!-- Dhuhr/Dreka -->
+                <div class="flex items-center gap-4">
+                    <label class="text-white/80 w-32 text-sm">
+                        <span class="font-medium">Dhuhr</span> / <span class="text-[#66e1dc]">Dreka</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="offsetDhuhr" 
+                        min="0" 
+                        max="60" 
+                        step="1"
+                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
+                    >
+                    <span class="text-white/60 text-sm">minutes</span>
+                </div>
+                
+                <!-- Asr/Ikindia -->
+                <div class="flex items-center gap-4">
+                    <label class="text-white/80 w-32 text-sm">
+                        <span class="font-medium">Asr</span> / <span class="text-[#66e1dc]">Ikindia</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="offsetAsr" 
+                        min="0" 
+                        max="60" 
+                        step="1"
+                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
+                    >
+                    <span class="text-white/60 text-sm">minutes</span>
+                </div>
+                
+                <!-- Maghrib/Akshami -->
+                <div class="flex items-center gap-4">
+                    <label class="text-white/80 w-32 text-sm">
+                        <span class="font-medium">Maghrib</span> / <span class="text-[#66e1dc]">Akshami</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="offsetMaghrib" 
+                        min="0" 
+                        max="60" 
+                        step="1"
+                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
+                    >
+                    <span class="text-white/60 text-sm">minutes</span>
+                </div>
+                
+                <!-- Isha/Jacia -->
+                <div class="flex items-center gap-4">
+                    <label class="text-white/80 w-32 text-sm">
+                        <span class="font-medium">Isha</span> / <span class="text-[#66e1dc]">Jacia</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="offsetIsha" 
+                        min="0" 
+                        max="60" 
+                        step="1"
+                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
+                    >
+                    <span class="text-white/60 text-sm">minutes</span>
+                </div>
+            </div>
+            <div class="mt-6">
+                <button 
+                    onclick="saveIqamahOffsets()"
+                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
+                >
+                    Save Iqamah Offsets
+                </button>
+            </div>
+        </div>
+
+        <!-- Display Settings -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-4">Display Settings</h2>
+            
+            <!-- 99 Names of Allah Display -->
+            <div class="mb-4">
+                <label class="text-white/80 text-sm mb-2 block">99 Names of Allah Display</label>
+                <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input 
+                            type="checkbox" 
+                            id="showAsmaUlHusna"
+                            class="w-5 h-5 rounded border-[#66e1dc]/30 bg-[#0f1c2e] text-[#66e1dc] focus:ring-[#66e1dc] focus:ring-2"
+                        >
+                        <span class="text-white/80">Show 99 Names of Allah display</span>
+                    </label>
+                </div>
+                <p class="text-white/50 text-sm mt-2">Displays one name at a time with Arabic calligraphy, transliteration, and Albanian meaning</p>
+            </div>
+            
+            <div class="mt-6">
+                <button 
+                    onclick="saveDisplaySettings()"
+                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
+                >
+                    Save Display Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Announcements Management -->
+        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-white">Scrolling Announcements</h2>
+                <button 
+                    onclick="addAnnouncement()"
+                    class="bg-[#66e1dc]/20 text-[#66e1dc] font-medium px-4 py-2 rounded-xl hover:bg-[#66e1dc]/30 transition-colors flex items-center gap-2"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add Announcement
+                </button>
+            </div>
+            <p class="text-white/60 text-sm mb-4">Manage the scrolling announcements banner. Drag items to reorder.</p>
+            <div id="announcementsList" class="space-y-3">
+                <!-- Announcements will be loaded here -->
+            </div>
+            <div class="mt-6">
+                <button 
+                    onclick="saveAnnouncements()"
+                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
+                >
+                    Save Announcements
+                </button>
             </div>
         </div>
 
@@ -115,6 +382,46 @@
     </div>
 
     <script>
+        // ==================== NOTIFICATION SYSTEM ====================
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            if (!container) return;
+            
+            // Remove any existing notifications
+            const existing = container.querySelector('.notification');
+            if (existing) {
+                existing.remove();
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const iconSvg = type === 'success' 
+                ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#66e1dc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+                : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+            
+            notification.innerHTML = `
+                <div class="notification-icon">${iconSvg}</div>
+                <div class="notification-content">${message}</div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.animation = 'fadeOut 0.3s ease-in forwards';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 3000);
+        }
+
         // ==================== SECURITY CONFIGURATION ====================
         // Set ENABLE_PASSWORD_PROTECTION to true to require a password
         // Set ADMIN_PASSWORD to your desired password (change this!)
@@ -134,8 +441,8 @@
                 return true;
             }
             
-            alert('Access denied. Incorrect password.');
-            window.location.href = '/';
+            showNotification('Access denied. Incorrect password.', 'error');
+            setTimeout(() => window.location.href = '/', 2000);
             return false;
         }
         
@@ -145,6 +452,162 @@
             setTimeout(() => window.location.href = '/', 2000);
         }
         
+        // ==================== ANNOUNCEMENTS MANAGEMENT ====================
+        // Default announcements
+        let announcements = [
+            "Jummah Prayer at 13:00",
+            "Islamic Classes - Sunday after Dhuhr",
+            "Support Your Masjid - JazakAllah Khair"
+        ];
+
+        // Load announcements from localStorage on page load
+        function loadAnnouncements() {
+            const saved = localStorage.getItem('masjid_announcements');
+            if (saved) {
+                try {
+                    announcements = JSON.parse(saved);
+                } catch (err) {
+                    console.warn('Failed to parse saved announcements:', err);
+                }
+            }
+            renderAnnouncements();
+        }
+
+        // Render announcements list with drag-and-drop support
+        function renderAnnouncements() {
+            const container = document.getElementById('announcementsList');
+            if (!container) return;
+            
+            container.innerHTML = announcements.map((announcement, index) => {
+                const escapedText = escapeHTML(announcement);
+                return `
+                <div class="bg-[#0f1c2e]/50 rounded-xl p-4 border border-[#66e1dc]/10 flex items-center gap-3 group hover:border-[#66e1dc]/30 transition-colors" data-index="${index}">
+                    <div class="flex-shrink-0 cursor-move text-[#66e1dc]/50 hover:text-[#66e1dc] transition-colors" title="Drag to reorder">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <input 
+                            type="text"
+                            class="w-full bg-[#1a2d47] border border-[#66e1dc]/20 rounded-lg px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc]"
+                            placeholder="Enter announcement text..."
+                            value="${escapedText}"
+                            onchange="updateAnnouncement(${index}, this.value)"
+                        >
+                    </div>
+                    <button 
+                        onclick="deleteAnnouncement(${index})"
+                        class="flex-shrink-0 text-red-400 hover:text-red-300 transition-colors"
+                        title="Delete announcement"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            }).join('');
+            
+            // Add drag and drop functionality
+            makeSortable();
+        }
+
+        // Make announcements list sortable
+        function makeSortable() {
+            const container = document.getElementById('announcementsList');
+            if (!container) return;
+            
+            let draggedElement = null;
+            
+            container.querySelectorAll('[data-index]').forEach((item) => {
+                item.draggable = true;
+                
+                item.addEventListener('dragstart', (e) => {
+                    draggedElement = item;
+                    item.style.opacity = '0.5';
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                
+                item.addEventListener('dragend', (e) => {
+                    item.style.opacity = '1';
+                    // Update order after drag
+                    const items = container.querySelectorAll('[data-index]');
+                    const newOrder = [];
+                    items.forEach((el) => {
+                        const oldIndex = parseInt(el.getAttribute('data-index'));
+                        newOrder.push(announcements[oldIndex]);
+                    });
+                    announcements = newOrder;
+                    renderAnnouncements();
+                    draggedElement = null;
+                });
+                
+                item.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    
+                    if (draggedElement && draggedElement !== item) {
+                        const allItems = Array.from(container.querySelectorAll('[data-index]'));
+                        const draggedIdx = allItems.indexOf(draggedElement);
+                        const targetIdx = allItems.indexOf(item);
+                        
+                        if (draggedIdx < targetIdx) {
+                            container.insertBefore(draggedElement, item.nextSibling);
+                        } else {
+                            container.insertBefore(draggedElement, item);
+                        }
+                    }
+                });
+                
+                item.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                });
+            });
+        }
+
+        // Add new announcement
+        function addAnnouncement() {
+            announcements.push("");
+            renderAnnouncements();
+            // Focus on the new input
+            setTimeout(() => {
+                const inputs = document.querySelectorAll('#announcementsList input');
+                if (inputs.length > 0) {
+                    inputs[inputs.length - 1].focus();
+                }
+            }, 100);
+        }
+
+        // Update announcement
+        function updateAnnouncement(index, value) {
+            if (index >= 0 && index < announcements.length) {
+                announcements[index] = value;
+            }
+        }
+
+        // Delete announcement
+        function deleteAnnouncement(index) {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                announcements.splice(index, 1);
+                renderAnnouncements();
+            }
+        }
+
+        // Save announcements to localStorage
+        function saveAnnouncements() {
+            // Filter out empty announcements
+            const filtered = announcements.filter(a => a.trim() !== '');
+            if (filtered.length === 0) {
+                showNotification('Please add at least one announcement.', 'error');
+                return;
+            }
+            localStorage.setItem('masjid_announcements', JSON.stringify(filtered));
+            // Dispatch custom event to notify main display (for same-tab updates)
+            window.dispatchEvent(new CustomEvent('announcementsUpdated'));
+            showNotification('Announcements saved successfully! The display will update automatically.', 'success');
+        }
+
         // ==================== HADITH MANAGEMENT ====================
         // Default hadiths
         let hadiths = [
@@ -211,6 +674,83 @@
             if (sheetUrl) {
                 document.getElementById('sheetUrl').value = sheetUrl;
             }
+            
+            // Load language preference
+            const language = localStorage.getItem('masjid_language') || 'sq';
+            document.getElementById('languageSelect').value = language;
+            
+            // Load announcements
+            loadAnnouncements();
+            
+            // Load Iqamah offsets
+            const savedOffsets = localStorage.getItem('masjid_iqamah_offsets');
+            if (savedOffsets) {
+                try {
+                    const offsets = JSON.parse(savedOffsets);
+                    document.getElementById('offsetFajr').value = offsets.Fajr || 20;
+                    document.getElementById('offsetDhuhr').value = offsets.Dhuhr || 15;
+                    document.getElementById('offsetAsr').value = offsets.Asr || 15;
+                    document.getElementById('offsetMaghrib').value = offsets.Maghrib || 5;
+                    document.getElementById('offsetIsha').value = offsets.Isha || 15;
+                } catch (err) {
+                    console.warn('Failed to parse saved offsets:', err);
+                }
+            } else {
+                // Use default values
+                document.getElementById('offsetFajr').value = 20;
+                document.getElementById('offsetDhuhr').value = 15;
+                document.getElementById('offsetAsr').value = 15;
+                document.getElementById('offsetMaghrib').value = 5;
+                document.getElementById('offsetIsha').value = 15;
+            }
+            
+            // Load display settings
+            const savedShowAsma = localStorage.getItem('masjid_show_asma_ul_husna');
+            if (savedShowAsma !== null) {
+                document.getElementById('showAsmaUlHusna').checked = savedShowAsma === 'true';
+            } else {
+                document.getElementById('showAsmaUlHusna').checked = true; // Default: show
+            }
+        }
+
+        // Save Iqamah offsets
+        function saveIqamahOffsets() {
+            const offsets = {
+                Fajr: parseInt(document.getElementById('offsetFajr').value) || 20,
+                Dhuhr: parseInt(document.getElementById('offsetDhuhr').value) || 15,
+                Asr: parseInt(document.getElementById('offsetAsr').value) || 15,
+                Maghrib: parseInt(document.getElementById('offsetMaghrib').value) || 5,
+                Isha: parseInt(document.getElementById('offsetIsha').value) || 15
+            };
+            
+            localStorage.setItem('masjid_iqamah_offsets', JSON.stringify(offsets));
+            // Dispatch custom event to notify main display (for same-tab updates)
+            window.dispatchEvent(new CustomEvent('iqamahOffsetsChanged', { detail: { offsets } }));
+            showNotification('Iqamah offsets saved successfully! The display will update automatically.', 'success');
+        }
+
+        // Save language preference
+        function saveLanguage() {
+            const language = document.getElementById('languageSelect').value;
+            localStorage.setItem('masjid_language', language);
+            // Dispatch custom event to notify main display (for same-tab updates)
+            window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language } }));
+            showNotification('Language preference saved! The display will update automatically.', 'success');
+        }
+
+        // Save display settings
+        function saveDisplaySettings() {
+            const showAsma = document.getElementById('showAsmaUlHusna').checked;
+            
+            localStorage.setItem('masjid_show_asma_ul_husna', showAsma.toString());
+            
+            // Dispatch custom event to notify main display (for same-tab updates)
+            window.dispatchEvent(new CustomEvent('displaySettingsChanged', { 
+                detail: { 
+                    showAsmaUlHusna: showAsma
+                } 
+            }));
+            showNotification('Display settings saved successfully! The display will update automatically.', 'success');
         }
 
         // Render hadith list with proper XSS protection
@@ -279,7 +819,7 @@
             localStorage.setItem('masjid_hadiths', JSON.stringify(hadiths));
             // Dispatch custom event to notify main display (for same-tab updates)
             window.dispatchEvent(new Event('hadithsUpdated'));
-            alert('Hadiths saved successfully! The display will update automatically.');
+            showNotification('Hadiths saved successfully! The display will update automatically.', 'success');
         }
 
         // Save Google Sheets URL
@@ -289,7 +829,9 @@
                 localStorage.setItem('masjid_sheet_url', url);
                 // Dispatch custom event to notify main display (for same-tab updates)
                 window.dispatchEvent(new Event('hadithsUpdated'));
-                alert('Google Sheets URL saved! The display will fetch hadiths from this sheet.');
+                showNotification('Google Sheets URL saved! The display will fetch hadiths from this sheet.', 'success');
+            } else {
+                showNotification('Please enter a valid Google Sheets URL.', 'error');
             }
         }
 

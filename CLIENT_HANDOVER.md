@@ -9,7 +9,7 @@ This document provides everything you need to know about the Prayer Times Displa
 ## 🎯 What Has Been Delivered
 
 ### ✅ Core Features
-1. **Prayer Times Display** - Beautiful, real-time prayer times for Masjid Shkup, Skopje
+1. **Prayer Times Display** - Beautiful, real-time prayer times for Masjid Nur Al Tawheed, Skopje
 2. **Admin Panel** - Easy-to-use interface for managing hadiths
 3. **TV-Optimized Display** - Perfect for large screen displays
 4. **Password Protection** - Secure access to both display and admin panel
@@ -129,7 +129,7 @@ Edit the announcements banner (around line 212):
 
 ```javascript
 announcements: [
-    "Jummah Prayer at 1:30 PM",
+    "Jummah Prayer at 13:00",
     "Islamic Classes - Sunday after Dhuhr",
     "Support Your Masjid - JazakAllah Khair"
 ]
@@ -226,8 +226,8 @@ The display automatically changes colors based on:
 ### Mosque Information
 Edit in `index.html` (around line 201):
 ```javascript
-mosqueName: "MASJID SHKUP",
-mosqueArabic: "مسجد شكوب",
+mosqueName: "MASJID NUR AL TAWHEED",
+mosqueArabic: "مسجد نور التوحيد",
 ```
 
 ### Timezone and Location

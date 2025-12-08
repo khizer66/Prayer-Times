@@ -5,24 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta Tags -->
-    <title>Masjid Shkup Prayer Times - Daily Prayer Times for Skopje, Macedonia</title>
-    <meta name="description" content="Masjid Shkup Prayer Times - Accurate daily prayer times for Skopje, Macedonia. View Fajr, Dhuhr, Asr, Maghrib, and Isha prayer times with Iqamah schedules.">
+    <title>Masjid Nur Al Tawheed Prayer Times - Daily Prayer Times for Skopje, Macedonia</title>
+    <meta name="description" content="Masjid Nur Al Tawheed Prayer Times - Accurate daily prayer times for Skopje, Macedonia. View Fajr, Dhuhr, Asr, Maghrib, and Isha prayer times with Iqamah schedules.">
     <meta name="keywords" content="prayer times, masjid, Skopje, Macedonia, Islamic prayer, salah times, adhan, iqamah">
-    <meta name="author" content="Masjid Shkup">
+    <meta name="author" content="Masjid Nur Al Tawheed">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://prayertimes5.netlify.app/">
-    <meta property="og:title" content="Masjid Shkup Prayer Times">
-    <meta property="og:description" content="Daily prayer times for Masjid Shkup, Skopje, Macedonia">
+    <meta property="og:title" content="Masjid Nur Al Tawheed Prayer Times">
+    <meta property="og:description" content="Daily prayer times for Masjid Nur Al Tawheed, Skopje, Macedonia">
     <meta property="og:image" content="https://prayertimes5.netlify.app/og-image.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://prayertimes5.netlify.app/">
-    <meta property="twitter:title" content="Masjid Shkup Prayer Times">
-    <meta property="twitter:description" content="Daily prayer times for Masjid Shkup, Skopje, Macedonia">
+    <meta property="twitter:title" content="Masjid Nur Al Tawheed Prayer Times">
+    <meta property="twitter:description" content="Daily prayer times for Masjid Nur Al Tawheed, Skopje, Macedonia">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -153,11 +153,52 @@
         
         .star { position: absolute; background: white; border-radius: 50%; box-shadow: 0 0 6px rgba(255, 255, 255, 0.7); }
         .islamic-pattern {
-            position: absolute; inset: 0; opacity: 0.015;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2366e1dc' stroke-width='0.5'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath d='M30 10L50 30L30 50L10 30Z'/%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3C/g%3E%3C/svg%3E");
+            position: absolute; 
+            inset: 0; 
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='islamic-geometric' x='0' y='0' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Cg fill='none' stroke='%2366e1dc' stroke-width='0.4'%3E%3C%21-- Traditional 8-pointed star (Rub el Hizb) --%3E%3Cpath d='M50 0 L55 20 L75 20 L60 35 L70 55 L50 45 L30 55 L40 35 L25 20 L45 20 Z'/%3E%3C%21-- Inner square rotated --%3E%3Cpath d='M50 25 L60 35 L50 45 L40 35 Z'/%3E%3C%21-- Connecting lines forming grid --%3E%3Cpath d='M50 0 L50 25 M50 75 L50 100 M0 50 L25 50 M75 50 L100 50'/%3E%3C%21-- Corner motifs --%3E%3Cpath d='M0 0 L10 0 L0 10 Z'/%3E%3Cpath d='M100 0 L90 0 L100 10 Z'/%3E%3Cpath d='M0 100 L10 100 L0 90 Z'/%3E%3Cpath d='M100 100 L90 100 L100 90 Z'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23islamic-geometric)'/%3E%3C/svg%3E");
             animation: patternDrift 150s linear infinite;
+            pointer-events: none;
         }
         .jummah-badge { background: linear-gradient(135deg, #d4af37, #f4d03f); }
+        
+        /* 99 Names of Allah Display */
+        /* Fade animation is handled by React state for smoother transitions */
+        
+        .asma-arabic-glow {
+            text-shadow: 0 0 20px rgba(102, 225, 220, 0.3),
+                         0 0 40px rgba(102, 225, 220, 0.2),
+                         0 0 60px rgba(102, 225, 220, 0.1);
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(102, 225, 220, 0.3),
+                             0 0 40px rgba(102, 225, 220, 0.2),
+                             0 0 60px rgba(102, 225, 220, 0.1);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgba(102, 225, 220, 0.4),
+                             0 0 50px rgba(102, 225, 220, 0.3),
+                             0 0 70px rgba(102, 225, 220, 0.2);
+            }
+        }
+        
+        /* Prayer Progress Ring */
+        @keyframes progressPulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 5px rgba(102, 225, 220, 0.3));
+            }
+            50% { 
+                filter: drop-shadow(0 0 15px rgba(102, 225, 220, 0.6));
+            }
+        }
+        
+        .progress-ring-pulse {
+            animation: progressPulse 2s ease-in-out infinite;
+        }
+        
     </style>
 </head>
 <body>
@@ -197,10 +238,10 @@
         const { useState, useEffect, useCallback, useMemo } = React;
 
         // ==================== CONFIGURATION ====================
-        // NOTE: Verify Arabic spelling "مسجد شكوب" with client - alternatives: مسجد سكوبيه (Skopje)
+        // NOTE: Verify Arabic spelling "مسجد نور التوحيد" with client - alternatives: مسجد سكوبيه (Skopje)
         const CONFIG = {
-            mosqueName: "MASJID SHKUP",
-            mosqueArabic: "مسجد شكوب",
+            mosqueName: "MASJID NUR AL TAWHEED",
+            mosqueArabic: "مسجد نور التوحيد",
             bismillah: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
             productionMode: window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1'),  // Auto-detect production
             city: "Skopje",
@@ -209,12 +250,47 @@
             method: 3,
             hadithSheetUrl: null,
             iqamahOffset: { Fajr: 20, Dhuhr: 15, Asr: 15, Maghrib: 5, Isha: 15 },
-            announcements: ["Jummah Prayer at 1:30 PM", "Islamic Classes - Sunday after Dhuhr", "Support Your Masjid - JazakAllah Khair"],
+            announcements: ["Jummah Prayer at 13:00", "Islamic Classes - Sunday after Dhuhr", "Support Your Masjid - JazakAllah Khair"],
+            // Translations for prayer names (English and Albanian)
+            prayerTranslations: {
+                en: {
+                    Fajr: "Fajr",
+                    Dhuhr: "Dhuhr",
+                    Asr: "Asr",
+                    Maghrib: "Maghrib",
+                    Isha: "Isha"
+                },
+                sq: {
+                    Fajr: "Sabahu",
+                    Dhuhr: "Dreka",
+                    Asr: "Ikindia",
+                    Maghrib: "Akshami",
+                    Isha: "Jacia"
+                }
+            },
+            // Translations for labels (English and Albanian)
+            labelTranslations: {
+                en: {
+                    nextPrayer: "Next Prayer",
+                    iqamah: "Iqamah",
+                    quran: "Quran",
+                    hadith: "Hadith",
+                    countdownPrefix: "in"
+                },
+                sq: {
+                    nextPrayer: "Namazi pasues",
+                    iqamah: "Ikameti",
+                    quran: "Kuran",
+                    hadith: "Hadith",
+                    countdownPrefix: "edhe"
+                }
+            },
             // TV Display Settings
             tvMode: true,  // Enable TV-optimized layout (larger text, better spacing)
             allowScrolling: false,  // Set to true if content doesn't fit on TV (allows scrolling)
             compactLayout: false,  // Set to true to reduce spacing for smaller TVs
-            showHadith: true  // Set to false to hide hadith section if it doesn't fit
+            showHadith: true,  // Set to false to hide hadith section if it doesn't fit
+            showAsmaUlHusna: true  // Show 99 Names of Allah display
         };
         
         // TV Mode Toggle - Store in localStorage for persistence
@@ -223,6 +299,157 @@
         if (savedTvMode !== null) {
             CONFIG.tvMode = savedTvMode === 'true';
         }
+
+        // Load Iqamah offsets from localStorage
+        const loadIqamahOffsets = () => {
+            const savedOffsets = localStorage.getItem('masjid_iqamah_offsets');
+            if (savedOffsets) {
+                try {
+                    const offsets = JSON.parse(savedOffsets);
+                    // Merge with CONFIG defaults (saved offsets take priority)
+                    CONFIG.iqamahOffset = {
+                        Fajr: offsets.Fajr ?? CONFIG.iqamahOffset.Fajr,
+                        Dhuhr: offsets.Dhuhr ?? CONFIG.iqamahOffset.Dhuhr,
+                        Asr: offsets.Asr ?? CONFIG.iqamahOffset.Asr,
+                        Maghrib: offsets.Maghrib ?? CONFIG.iqamahOffset.Maghrib,
+                        Isha: offsets.Isha ?? CONFIG.iqamahOffset.Isha
+                    };
+                } catch (err) {
+                    console.warn('Failed to parse saved Iqamah offsets:', err);
+                }
+            }
+        };
+        
+        // Load announcements from localStorage
+        const loadAnnouncements = () => {
+            const saved = localStorage.getItem('masjid_announcements');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        CONFIG.announcements = parsed;
+                    }
+                } catch (err) {
+                    console.warn('Failed to parse saved announcements:', err);
+                }
+            }
+        };
+        
+        // Load display settings from localStorage
+        const loadDisplaySettings = () => {
+            const savedShowAsma = localStorage.getItem('masjid_show_asma_ul_husna');
+            if (savedShowAsma !== null) {
+                CONFIG.showAsmaUlHusna = savedShowAsma === 'true';
+            }
+        };
+        
+        // Load offsets and announcements on page load
+        loadIqamahOffsets();
+        loadAnnouncements();
+        loadDisplaySettings();
+
+        // ==================== 99 NAMES OF ALLAH (ASMA UL HUSNA) ====================
+        const ASMA_UL_HUSNA = [
+            { arabic: "الرَّحْمَنُ", transliteration: "Ar-Rahman", english: "The Most Merciful", albanian: "Mëshiruesi" },
+            { arabic: "الرَّحِيمُ", transliteration: "Ar-Raheem", english: "The Most Compassionate", albanian: "Mëshirëploti" },
+            { arabic: "الْمَلِكُ", transliteration: "Al-Malik", english: "The King", albanian: "Mbreti" },
+            { arabic: "الْقُدُّوسُ", transliteration: "Al-Quddus", english: "The Most Holy", albanian: "Më i Shenjti" },
+            { arabic: "السَّلَامُ", transliteration: "As-Salam", english: "The Source of Peace", albanian: "Burimi i Paqes" },
+            { arabic: "الْمُؤْمِنُ", transliteration: "Al-Mu'min", english: "The Guardian of Faith", albanian: "Mbrojtësi i Besimit" },
+            { arabic: "الْمُهَيْمِنُ", transliteration: "Al-Muhaymin", english: "The Protector", albanian: "Mbrojtësi" },
+            { arabic: "الْعَزِيزُ", transliteration: "Al-Aziz", english: "The Mighty", albanian: "i Fuqishmi" },
+            { arabic: "الْجَبَّارُ", transliteration: "Al-Jabbar", english: "The Compeller", albanian: "i Detyruesi" },
+            { arabic: "الْمُتَكَبِّرُ", transliteration: "Al-Mutakabbir", english: "The Supreme", albanian: "Më i Larti" },
+            { arabic: "الْخَالِقُ", transliteration: "Al-Khaliq", english: "The Creator", albanian: "Krijuesi" },
+            { arabic: "الْبَارِئُ", transliteration: "Al-Bari", english: "The Maker", albanian: "Bërësi" },
+            { arabic: "الْمُصَوِّرُ", transliteration: "Al-Musawwir", english: "The Fashioner", albanian: "Formuesi" },
+            { arabic: "الْغَفَّارُ", transliteration: "Al-Ghaffar", english: "The Repeatedly Forgiving", albanian: "Falësi i Vazhdueshëm" },
+            { arabic: "الْقَهَّارُ", transliteration: "Al-Qahhar", english: "The Subduer", albanian: "Nënshtruesi" },
+            { arabic: "الْوَهَّابُ", transliteration: "Al-Wahhab", english: "The Bestower", albanian: "Dhuruesi" },
+            { arabic: "الرَّزَّاقُ", transliteration: "Ar-Razzaq", english: "The Provider", albanian: "Furnizuesi" },
+            { arabic: "الْفَتَّاحُ", transliteration: "Al-Fattah", english: "The Opener", albanian: "Hapësi" },
+            { arabic: "الْعَلِيمُ", transliteration: "Al-Alim", english: "The All-Knowing", albanian: "i Gjithëdijshmi" },
+            { arabic: "الْقَابِضُ", transliteration: "Al-Qabid", english: "The Restrainer", albanian: "Kufizuesi" },
+            { arabic: "الْبَاسِطُ", transliteration: "Al-Basit", english: "The Expander", albanian: "Zgjeruesi" },
+            { arabic: "الْخَافِضُ", transliteration: "Al-Khafid", english: "The Abaser", albanian: "Ulësuesi" },
+            { arabic: "الرَّافِعُ", transliteration: "Ar-Rafi", english: "The Exalter", albanian: "Ngritësi" },
+            { arabic: "الْمُعِزُّ", transliteration: "Al-Mu'izz", english: "The Honorer", albanian: "Nderuesi" },
+            { arabic: "الْمُذِلُّ", transliteration: "Al-Mudhill", english: "The Humiliator", albanian: "Poshtëruesi" },
+            { arabic: "السَّمِيعُ", transliteration: "As-Sami", english: "The All-Hearing", albanian: "i Gjithëdëgjueshmi" },
+            { arabic: "الْبَصِيرُ", transliteration: "Al-Basir", english: "The All-Seeing", albanian: "i Gjithëshikueshmi" },
+            { arabic: "الْحَكَمُ", transliteration: "Al-Hakam", english: "The Judge", albanian: "Gjyqtari" },
+            { arabic: "الْعَدْلُ", transliteration: "Al-Adl", english: "The Just", albanian: "i Drejti" },
+            { arabic: "اللَّطِيفُ", transliteration: "Al-Latif", english: "The Subtle One", albanian: "i Butë" },
+            { arabic: "الْخَبِيرُ", transliteration: "Al-Khabir", english: "The All-Aware", albanian: "i Gjithëvetëdijshëm" },
+            { arabic: "الْحَلِيمُ", transliteration: "Al-Halim", english: "The Forbearing", albanian: "i Durueshmi" },
+            { arabic: "الْعَظِيمُ", transliteration: "Al-Azim", english: "The Great", albanian: "i Madhi" },
+            { arabic: "الْغَفُورُ", transliteration: "Al-Ghafur", english: "The Forgiving", albanian: "Falësi" },
+            { arabic: "الشَّكُورُ", transliteration: "Ash-Shakur", english: "The Appreciative", albanian: "Mirënjohësi" },
+            { arabic: "الْعَلِيُّ", transliteration: "Al-Ali", english: "The Most High", albanian: "Më i Larti" },
+            { arabic: "الْكَبِيرُ", transliteration: "Al-Kabir", english: "The Greatest", albanian: "Më i Madhi" },
+            { arabic: "الْحَفِيظُ", transliteration: "Al-Hafiz", english: "The Preserver", albanian: "Mbrojtësi" },
+            { arabic: "الْمُقِيتُ", transliteration: "Al-Muqit", english: "The Maintainer", albanian: "Mbanësi" },
+            { arabic: "الْحَسِيبُ", transliteration: "Al-Hasib", english: "The Reckoner", albanian: "Llogaritësi" },
+            { arabic: "الْجَلِيلُ", transliteration: "Al-Jalil", english: "The Majestic", albanian: "Madhështori" },
+            { arabic: "الْكَرِيمُ", transliteration: "Al-Karim", english: "The Generous", albanian: "Bujari" },
+            { arabic: "الرَّقِيبُ", transliteration: "Ar-Raqib", english: "The Watchful", albanian: "Vëzhguesi" },
+            { arabic: "الْمُجِيبُ", transliteration: "Al-Mujib", english: "The Responsive", albanian: "Përgjigjësi" },
+            { arabic: "الْوَاسِعُ", transliteration: "Al-Wasi", english: "The Vast", albanian: "i Gjerë" },
+            { arabic: "الْحَكِيمُ", transliteration: "Al-Hakim", english: "The Wise", albanian: "i Urti" },
+            { arabic: "الْوَدُودُ", transliteration: "Al-Wadud", english: "The Loving", albanian: "i Dashuri" },
+            { arabic: "الْمَجِيدُ", transliteration: "Al-Majid", english: "The Glorious", albanian: "i Lavdishmi" },
+            { arabic: "الْبَاعِثُ", transliteration: "Al-Ba'ith", english: "The Resurrector", albanian: "Ringjallësi" },
+            { arabic: "الشَّهِيدُ", transliteration: "Ash-Shahid", english: "The Witness", albanian: "Dëshmitari" },
+            { arabic: "الْحَقُّ", transliteration: "Al-Haqq", english: "The Truth", albanian: "E Vërteta" },
+            { arabic: "الْوَكِيلُ", transliteration: "Al-Wakil", english: "The Trustee", albanian: "Besëdhënësi" },
+            { arabic: "الْقَوِيُّ", transliteration: "Al-Qawiyy", english: "The Strong", albanian: "i Forti" },
+            { arabic: "الْمَتِينُ", transliteration: "Al-Matin", english: "The Firm", albanian: "i Qëndrueshmi" },
+            { arabic: "الْوَلِيُّ", transliteration: "Al-Wali", english: "The Protector", albanian: "Mbrojtësi" },
+            { arabic: "الْحَمِيدُ", transliteration: "Al-Hamid", english: "The Praiseworthy", albanian: "i Lartësuari" },
+            { arabic: "الْمُحْصِي", transliteration: "Al-Muhsi", english: "The Accounter", albanian: "Numëruesi" },
+            { arabic: "الْمُبْدِئُ", transliteration: "Al-Mubdi", english: "The Originator", albanian: "Fillestari" },
+            { arabic: "الْمُعِيدُ", transliteration: "Al-Mu'id", english: "The Restorer", albanian: "Rikthyesi" },
+            { arabic: "الْمُحْيِي", transliteration: "Al-Muhyi", english: "The Giver of Life", albanian: "Jepësi i Jetës" },
+            { arabic: "الْمُمِيتُ", transliteration: "Al-Mumit", english: "The Taker of Life", albanian: "Marrësi i Jetës" },
+            { arabic: "الْحَيُّ", transliteration: "Al-Hayy", english: "The Living", albanian: "i Gjalli" },
+            { arabic: "الْقَيُّومُ", transliteration: "Al-Qayyum", english: "The Self-Subsisting", albanian: "Vetëmbështetësi" },
+            { arabic: "الْوَاجِدُ", transliteration: "Al-Wajid", english: "The Finder", albanian: "Gjetësi" },
+            { arabic: "الْمَاجِدُ", transliteration: "Al-Majid", english: "The Noble", albanian: "Fisnori" },
+            { arabic: "الْوَاحِدُ", transliteration: "Al-Wahid", english: "The One", albanian: "i Vetmi" },
+            { arabic: "الْأَحَدُ", transliteration: "Al-Ahad", english: "The Unique", albanian: "i Veçantë" },
+            { arabic: "الصَّمَدُ", transliteration: "As-Samad", english: "The Eternal", albanian: "i Përjetshmi" },
+            { arabic: "الْقَادِرُ", transliteration: "Al-Qadir", english: "The Able", albanian: "i Zoti" },
+            { arabic: "الْمُقْتَدِرُ", transliteration: "Al-Muqtadir", english: "The Powerful", albanian: "i Fuqishmi" },
+            { arabic: "الْمُقَدِّمُ", transliteration: "Al-Muqaddim", english: "The Expediter", albanian: "Përparuesi" },
+            { arabic: "الْمُؤَخِّرُ", transliteration: "Al-Mu'akhkhir", english: "The Delayer", albanian: "Vonesuesi" },
+            { arabic: "الْأَوَّلُ", transliteration: "Al-Awwal", english: "The First", albanian: "i Parë" },
+            { arabic: "الْآخِرُ", transliteration: "Al-Akhir", english: "The Last", albanian: "i Fundit" },
+            { arabic: "الظَّاهِرُ", transliteration: "Az-Zahir", english: "The Manifest", albanian: "i Dukshmi" },
+            { arabic: "الْبَاطِنُ", transliteration: "Al-Batin", english: "The Hidden", albanian: "i Fshehtë" },
+            { arabic: "الْوَالِي", transliteration: "Al-Wali", english: "The Governor", albanian: "Qeveritari" },
+            { arabic: "الْمُتَعَالِي", transliteration: "Al-Muta'ali", english: "The Exalted", albanian: "i Lartësuari" },
+            { arabic: "الْبَرُّ", transliteration: "Al-Barr", english: "The Source of Goodness", albanian: "Burimi i Mirësisë" },
+            { arabic: "التَّوَّابُ", transliteration: "At-Tawwab", english: "The Acceptor of Repentance", albanian: "Pranuesi i Pendimit" },
+            { arabic: "الْمُنْتَقِمُ", transliteration: "Al-Muntaqim", english: "The Avenger", albanian: "Hakmarrësi" },
+            { arabic: "الْعَفُوُّ", transliteration: "Al-Afu", english: "The Pardoner", albanian: "Falësi" },
+            { arabic: "الرَّءُوفُ", transliteration: "Ar-Ra'uf", english: "The Kind", albanian: "i Butë" },
+            { arabic: "مَالِكُ الْمُلْكِ", transliteration: "Malik al-Mulk", english: "The Owner of Sovereignty", albanian: "Zotëruesi i Sovranitetit" },
+            { arabic: "ذُو الْجَلَالِ وَالْإِكْرَامِ", transliteration: "Dhu al-Jalal wa al-Ikram", english: "The Possessor of Majesty and Honor", albanian: "Zotëruesi i Madhështisë dhe Nderit" },
+            { arabic: "الْمُقْسِطُ", transliteration: "Al-Muqsit", english: "The Equitable", albanian: "i Drejti" },
+            { arabic: "الْجَامِعُ", transliteration: "Al-Jami", english: "The Gatherer", albanian: "Mbledhësi" },
+            { arabic: "الْغَنِيُّ", transliteration: "Al-Ghani", english: "The Self-Sufficient", albanian: "Vetëmjaftuesi" },
+            { arabic: "الْمُغْنِي", transliteration: "Al-Mughni", english: "The Enricher", albanian: "Pasuruesi" },
+            { arabic: "الْمَانِعُ", transliteration: "Al-Mani", english: "The Preventer", albanian: "Penguesi" },
+            { arabic: "الضَّارُّ", transliteration: "Ad-Darr", english: "The Afflicter", albanian: "Dëmtuesi" },
+            { arabic: "النَّافِعُ", transliteration: "An-Nafi", english: "The Benefiter", albanian: "Dobifitësi" },
+            { arabic: "النُّورُ", transliteration: "An-Nur", english: "The Light", albanian: "Drita" },
+            { arabic: "الْهَادِي", transliteration: "Al-Hadi", english: "The Guide", albanian: "Udhëheqësi" },
+            { arabic: "الْبَدِيعُ", transliteration: "Al-Badi", english: "The Incomparable", albanian: "i Paashtë" },
+            { arabic: "الْبَاقِي", transliteration: "Al-Baqi", english: "The Everlasting", albanian: "i Përjetshmi" },
+            { arabic: "الْوَارِثُ", transliteration: "Al-Warith", english: "The Inheritor", albanian: "Trashëgimtari" },
+            { arabic: "الرَّشِيدُ", transliteration: "Ar-Rashid", english: "The Guide to the Right Path", albanian: "Udhëheqësi në Rrugën e Drejtë" },
+            { arabic: "الصَّبُورُ", transliteration: "As-Sabur", english: "The Patient", albanian: "i Durueshmi" }
+        ];
 
         // ==================== STORAGE HELPERS ====================
         const STORAGE_KEYS = {
@@ -269,17 +496,51 @@
         };
 
         const formatTime = () => {
-            return new Date().toLocaleTimeString('en-US', { 
+            // Get time in Skopje timezone using the same method as getSkopjeTime
+            // This ensures consistency and 24-hour format
+            const options = { 
                 timeZone: CONFIG.timezone, 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit', 
-                hour12: true 
+                hour: 'numeric', 
+                minute: 'numeric', 
+                second: 'numeric',
+                hour12: false 
+            };
+            const timeStr = new Date().toLocaleString('en-US', options);
+            
+            // Parse the time string (format: "H:MM:SS" or "HH:MM:SS")
+            const parts = timeStr.split(':');
+            if (parts.length === 3) {
+                const h = parseInt(parts[0], 10);
+                const m = parseInt(parts[1], 10);
+                const s = parseInt(parts[2], 10);
+                // Format with leading zeros to ensure HH:MM:SS format
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }
+            
+            // Fallback: use getSkopjeTime and get seconds from timezone-aware date
+            const time = getSkopjeTime();
+            const now = new Date();
+            const timeStrWithSeconds = now.toLocaleString('en-US', { 
+                timeZone: CONFIG.timezone, 
+                hour: 'numeric', 
+                minute: 'numeric', 
+                second: 'numeric',
+                hour12: false 
             });
+            const secParts = timeStrWithSeconds.split(':');
+            const seconds = secParts.length >= 3 ? parseInt(secParts[2], 10) : now.getSeconds();
+            return `${String(time.hours).padStart(2, '0')}:${String(time.minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         };
 
-        const formatDate = () => {
-            return new Date().toLocaleDateString('en-US', { 
+        // Get current language from localStorage (default: Albanian 'sq')
+        const getCurrentLanguage = () => {
+            return localStorage.getItem('masjid_language') || 'sq';
+        };
+
+        const formatDate = (langOverride = null) => {
+            const lang = langOverride || getCurrentLanguage();
+            const locale = lang === 'sq' ? 'sq-AL' : 'en-US'; // Albanian locale: sq-AL, English: en-US
+            return new Date().toLocaleDateString(locale, { 
                 timeZone: CONFIG.timezone, 
                 weekday: 'long', 
                 year: 'numeric', 
@@ -308,12 +569,53 @@
         };
 
         const getIqamahTime = (prayerName, adhanTime) => {
-            const [h, m] = adhanTime.split(':').map(Number);
-            const offset = CONFIG.iqamahOffset[prayerName] || 15;
+            // Validate input
+            if (!adhanTime || typeof adhanTime !== 'string') {
+                console.warn('Invalid adhanTime:', adhanTime);
+                return '00:00';
+            }
+            
+            // Parse time string (expects "HH:MM" format)
+            const timeParts = adhanTime.split(':');
+            if (timeParts.length !== 2) {
+                console.warn('Invalid time format:', adhanTime);
+                return '00:00';
+            }
+            
+            const h = Number(timeParts[0]);
+            const m = Number(timeParts[1]);
+            
+            // Validate parsed numbers
+            if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) {
+                console.warn('Invalid time values:', h, m);
+                return '00:00';
+            }
+            
+            // Get offset for this prayer (check localStorage first, then CONFIG)
+            let offset = CONFIG.iqamahOffset[prayerName] || 15;
+            
+            // Check localStorage for updated offsets
+            const savedOffsets = localStorage.getItem('masjid_iqamah_offsets');
+            if (savedOffsets) {
+                try {
+                    const offsets = JSON.parse(savedOffsets);
+                    if (offsets[prayerName] !== undefined) {
+                        offset = offsets[prayerName];
+                    }
+                } catch (err) {
+                    // Use CONFIG default if parsing fails
+                }
+            }
+            
+            // Calculate total minutes
             const totalMins = h * 60 + m + offset;
+            
+            // Calculate new time (handle overflow past midnight)
             const newH = Math.floor(totalMins / 60) % 24;
             const newM = totalMins % 60;
-            return formatTime12Hour(`${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`);
+            
+            // Return in 24-hour format (HH:MM)
+            return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
         };
 
         const getSeason = () => {
@@ -344,7 +646,7 @@
             { text: "The first action for which a servant will be held accountable on the Day of Judgment is prayer.", source: "Nasa'i" },
             { text: "Whoever maintains the prayers will have light, proof, and salvation on the Day of Resurrection.", source: "Ahmad" },
             { text: "The best of deeds is the prayer at its earliest time.", source: "Tirmidhi" },
-            { text: "Indeed, prayer prohibits immorality and wrongdoing, and the remembrance of Allah is greater.", source: "Quran 29:45" },
+            { text: "Indeed, prayer prohibits immorality and wrongdoing, and the remembrance of Allah is greater.", source: "Kuran 29:45" },
             { text: "Pray as you have seen me praying.", source: "Bukhari" },
             { text: "When any one of you stands to pray, he is communicating with his Lord.", source: "Bukhari" }
         ];
@@ -362,7 +664,7 @@
         // ==================== STARS COMPONENT ====================
         const Stars = ({ count = 35, visible }) => {
             const stars = useMemo(() => Array.from({length: count}, (_, i) => ({
-                id: i, left: Math.random() * 100, top: Math.random() * 60,
+                id: i, left: Math.random() * 100, top: Math.random() * 85,
                 size: Math.random() * 2.5 + 1, delay: Math.random() * 4, duration: Math.random() * 3 + 2
             })), [count]);
             if (!visible) return null;
@@ -431,6 +733,203 @@
             );
         };
 
+        // ==================== LANGUAGE MANAGEMENT ====================
+        // Get prayer name translation - accepts optional lang parameter for reactivity
+        const getPrayerTranslation = (prayerName, langOverride = null) => {
+            const lang = langOverride || getCurrentLanguage();
+            return CONFIG.prayerTranslations[lang]?.[prayerName] || CONFIG.prayerTranslations.sq[prayerName] || prayerName;
+        };
+
+        // Get label translation - accepts optional lang parameter for reactivity
+        const getLabelTranslation = (labelKey, langOverride = null) => {
+            const lang = langOverride || getCurrentLanguage();
+            return CONFIG.labelTranslations[lang]?.[labelKey] || CONFIG.labelTranslations.sq[labelKey] || labelKey;
+        };
+
+        // Get Quran translation for hadith sources
+        const translateQuranInSource = (source) => {
+            if (!source) return getLabelTranslation('hadith');
+            const lang = getCurrentLanguage();
+            const quranTranslation = CONFIG.labelTranslations[lang]?.quran || 'Kuran';
+            return source.replace(/Quran/gi, quranTranslation);
+        };
+
+        // ==================== 99 NAMES OF ALLAH COMPONENT ====================
+        const AsmaUlHusnaDisplay = () => {
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [isVisible, setIsVisible] = useState(false);
+            
+            // Initial fade-in
+            useEffect(() => {
+                setTimeout(() => setIsVisible(true), 100);
+            }, []);
+            
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    // Fade out
+                    setIsVisible(false);
+                    // After fade out completes, change name and fade in
+                    setTimeout(() => {
+                        setCurrentIndex(prev => (prev + 1) % ASMA_UL_HUSNA.length);
+                        setTimeout(() => setIsVisible(true), 50); // Small delay before fade in
+                    }, 1000); // Wait for fade out animation (1s)
+                }, 30000); // Change every 30 seconds
+                
+                return () => clearInterval(interval);
+            }, []);
+            
+            const currentName = ASMA_UL_HUSNA[currentIndex];
+            const lang = getCurrentLanguage();
+            
+            return (
+                <div className="text-center relative z-10">
+                    <div 
+                        className="asma-display"
+                        style={{
+                            opacity: isVisible ? 1 : 0,
+                            transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+                            transition: 'opacity 1s ease-in-out, transform 1s ease-in-out'
+                        }}
+                    >
+                        <div className={`asma-arabic-glow ${CONFIG.tvMode ? 'text-7xl md:text-8xl lg:text-9xl' : 'text-6xl md:text-7xl lg:text-8xl'} arabic-font text-white mb-5`}>
+                            {currentName.arabic}
+                        </div>
+                        <div className={`text-[#66e1dc]/80 ${CONFIG.tvMode ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-xl md:text-2xl lg:text-3xl'} mb-2 font-medium`}>
+                            {currentName.transliteration}
+                        </div>
+                        <div className={`text-white/70 ${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-lg md:text-xl lg:text-2xl'} arabic-font`}>
+                            {currentName.albanian}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ==================== PRAYER PROGRESS RING COMPONENT (Merged with Countdown) ====================
+        const PrayerProgressRing = ({ prayerTimes, currentTime, countdown }) => {
+            const [progress, setProgress] = useState(0);
+            const [nextPrayer, setNextPrayer] = useState(null);
+            const [lastPrayer, setLastPrayer] = useState(null);
+            const [currentLang, setCurrentLang] = useState(getCurrentLanguage());
+            
+            // Listen for language changes
+            useEffect(() => {
+                const handleLangChange = () => {
+                    setCurrentLang(getCurrentLanguage());
+                };
+                window.addEventListener('languageChanged', handleLangChange);
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'masjid_language') {
+                        setCurrentLang(getCurrentLanguage());
+                    }
+                });
+                return () => {
+                    window.removeEventListener('languageChanged', handleLangChange);
+                };
+            }, []);
+            
+            useEffect(() => {
+                if (!prayerTimes || !currentTime) return;
+                
+                const updateProgress = () => {
+                    const currentMins = currentTime.totalMinutes;
+                    let lastPrayerFound = null;
+                    let nextPrayerFound = null;
+                    
+                    // Find last and next prayer
+                    for (let i = prayerTimes.length - 1; i >= 0; i--) {
+                        const [h, m] = prayerTimes[i].time.split(':').map(Number);
+                        const prayerMins = h * 60 + m;
+                        if (currentMins >= prayerMins) {
+                            lastPrayerFound = { name: prayerTimes[i].name, mins: prayerMins };
+                            break;
+                        }
+                    }
+                    
+                    for (let i = 0; i < prayerTimes.length; i++) {
+                        const [h, m] = prayerTimes[i].time.split(':').map(Number);
+                        const prayerMins = h * 60 + m;
+                        if (currentMins < prayerMins) {
+                            nextPrayerFound = { name: prayerTimes[i].name, mins: prayerMins };
+                            break;
+                        }
+                    }
+                    
+                    if (!nextPrayerFound) {
+                        const [h, m] = prayerTimes[0].time.split(':').map(Number);
+                        nextPrayerFound = { name: prayerTimes[0].name, mins: h * 60 + m + 24 * 60 };
+                    }
+                    
+                    if (lastPrayerFound && nextPrayerFound) {
+                        const totalDuration = nextPrayerFound.mins - lastPrayerFound.mins;
+                        const elapsed = currentMins - lastPrayerFound.mins;
+                        const progressPercent = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+                        setProgress(progressPercent);
+                        setNextPrayer(nextPrayerFound);
+                        setLastPrayer(lastPrayerFound);
+                    }
+                };
+                
+                updateProgress();
+                const interval = setInterval(updateProgress, 60000); // Update every minute
+                
+                return () => clearInterval(interval);
+            }, [prayerTimes, currentTime]);
+            
+            if (!nextPrayer || !countdown) return null;
+            
+            const nextPrayerName = getPrayerTranslation(nextPrayer.name, currentLang);
+            
+            // Smaller radius for inline progress ring
+            const inlineRadius = 20;
+            const inlineCircumference = 2 * Math.PI * inlineRadius;
+            const inlineOffset = inlineCircumference - (progress / 100) * inlineCircumference;
+            
+            return (
+                <div className={`text-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4 md:mb-5'}`}>
+                    {/* Countdown Bar with Progress Ring in the middle */}
+                    <div className={`inline-flex items-center gap-4 ${CONFIG.compactLayout ? 'px-6 py-3' : 'px-8 py-4'} glass-card rounded-2xl border border-[#66e1dc]/20`}>
+                        <span className={`text-white/60 ${CONFIG.tvMode ? 'text-base md:text-lg lg:text-xl' : 'text-sm md:text-base'} uppercase tracking-wider font-semibold`}>{getLabelTranslation('nextPrayer', currentLang)}</span>
+                        <span className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-lg md:text-xl'} font-bold`}>{nextPrayerName}</span>
+                        
+                        {/* Progress Ring - Inline in the middle */}
+                        <div className={`relative ${CONFIG.tvMode ? 'w-16 h-16 md:w-20 md:h-20' : 'w-14 h-14 md:w-16 md:h-16'} ${progress >= 90 ? 'progress-ring-pulse' : ''}`}>
+                            <svg className="transform -rotate-90" width="100%" height="100%">
+                                <circle
+                                    cx="50%"
+                                    cy="50%"
+                                    r={inlineRadius}
+                                    fill="none"
+                                    stroke="#213655"
+                                    strokeWidth="5"
+                                />
+                                <circle
+                                    cx="50%"
+                                    cy="50%"
+                                    r={inlineRadius}
+                                    fill="none"
+                                    stroke="#66e1dc"
+                                    strokeWidth="5"
+                                    strokeDasharray={inlineCircumference}
+                                    strokeDashoffset={inlineOffset}
+                                    strokeLinecap="round"
+                                    style={{ transition: 'stroke-dashoffset 1s ease-out' }}
+                                />
+                            </svg>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-xs md:text-sm' : 'text-xs'} font-bold`}>
+                                    {Math.round(progress)}%
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <span className="text-white/30 text-lg">|</span>
+                        <span className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-lg md:text-xl'} font-bold`}>{getLabelTranslation('countdownPrefix', currentLang)} {countdown.hours > 0 ? `${countdown.hours}h ` : ''}{countdown.minutes}m</span>
+                    </div>
+                </div>
+            );
+        };
+
         // ==================== MAIN COMPONENT ====================
         const MosquePrayerTimes = () => {
             const [tick, setTick] = useState(0);
@@ -441,6 +940,7 @@
             const [error, setError] = useState(null);
             const [previewPrayer, setPreviewPrayer] = useState(null); // For design testing
             const [previewSeason, setPreviewSeason] = useState(null); // For season testing
+            const [currentLanguage, setCurrentLanguage] = useState(getCurrentLanguage());
 
             // Get current Skopje time info
             const skopjeTime = getSkopjeTime();
@@ -489,10 +989,12 @@
                 // Try to load from cache first
                 const cached = getCachedPrayerTimes();
                 if (cached && cached.length > 0) {
-                    // Restore Icon components (lost during JSON serialization)
+                    // Restore Icon components (lost during JSON serialization) and add translated names
+                    const lang = getCurrentLanguage();
                     const cachedWithIcons = cached.map(prayer => ({
                         ...prayer,
-                        Icon: Icons[prayer.name] || Icons.Fajr
+                        Icon: Icons[prayer.name] || Icons.Fajr,
+                        translatedName: prayer.translatedName || CONFIG.prayerTranslations[lang]?.[prayer.name] || CONFIG.prayerTranslations.sq[prayer.name] || prayer.name
                     }));
                     setPrayerTimes(cachedWithIcons);
                     setLoading(false);
@@ -521,12 +1023,13 @@
                     }
                     
                     const t = data.data.timings;
+                    const lang = getCurrentLanguage();
                     const newPrayerTimes = [
-                        { name: 'Fajr', time: t.Fajr, arabicName: 'الفجر', Icon: Icons.Fajr },
-                        { name: 'Dhuhr', time: t.Dhuhr, arabicName: 'الظهر', Icon: Icons.Dhuhr },
-                        { name: 'Asr', time: t.Asr, arabicName: 'العصر', Icon: Icons.Asr },
-                        { name: 'Maghrib', time: t.Maghrib, arabicName: 'المغرب', Icon: Icons.Maghrib },
-                        { name: 'Isha', time: t.Isha, arabicName: 'العشاء', Icon: Icons.Isha }
+                        { name: 'Fajr', time: t.Fajr, arabicName: 'الفجر', translatedName: CONFIG.prayerTranslations[lang]?.Fajr || CONFIG.prayerTranslations.sq.Fajr, Icon: Icons.Fajr },
+                        { name: 'Dhuhr', time: t.Dhuhr, arabicName: 'الظهر', translatedName: CONFIG.prayerTranslations[lang]?.Dhuhr || CONFIG.prayerTranslations.sq.Dhuhr, Icon: Icons.Dhuhr },
+                        { name: 'Asr', time: t.Asr, arabicName: 'العصر', translatedName: CONFIG.prayerTranslations[lang]?.Asr || CONFIG.prayerTranslations.sq.Asr, Icon: Icons.Asr },
+                        { name: 'Maghrib', time: t.Maghrib, arabicName: 'المغرب', translatedName: CONFIG.prayerTranslations[lang]?.Maghrib || CONFIG.prayerTranslations.sq.Maghrib, Icon: Icons.Maghrib },
+                        { name: 'Isha', time: t.Isha, arabicName: 'العشاء', translatedName: CONFIG.prayerTranslations[lang]?.Isha || CONFIG.prayerTranslations.sq.Isha, Icon: Icons.Isha }
                     ];
                     
                     setPrayerTimes(newPrayerTimes);
@@ -539,12 +1042,13 @@
                     // If we don't have cached data, use fallback
                     if (!cached) {
                         setError('Unable to load prayer times. Please check your connection.');
+                        const lang = getCurrentLanguage();
                         setPrayerTimes([
-                            { name: 'Fajr', time: '05:08', arabicName: 'الفجر', Icon: Icons.Fajr },
-                            { name: 'Dhuhr', time: '11:25', arabicName: 'الظهر', Icon: Icons.Dhuhr },
-                            { name: 'Asr', time: '13:45', arabicName: 'العصر', Icon: Icons.Asr },
-                            { name: 'Maghrib', time: '16:03', arabicName: 'المغرب', Icon: Icons.Maghrib },
-                            { name: 'Isha', time: '17:37', arabicName: 'العشاء', Icon: Icons.Isha }
+                            { name: 'Fajr', time: '05:08', arabicName: 'الفجر', translatedName: CONFIG.prayerTranslations[lang]?.Fajr || CONFIG.prayerTranslations.sq.Fajr, Icon: Icons.Fajr },
+                            { name: 'Dhuhr', time: '11:25', arabicName: 'الظهر', translatedName: CONFIG.prayerTranslations[lang]?.Dhuhr || CONFIG.prayerTranslations.sq.Dhuhr, Icon: Icons.Dhuhr },
+                            { name: 'Asr', time: '13:45', arabicName: 'العصر', translatedName: CONFIG.prayerTranslations[lang]?.Asr || CONFIG.prayerTranslations.sq.Asr, Icon: Icons.Asr },
+                            { name: 'Maghrib', time: '16:03', arabicName: 'المغرب', translatedName: CONFIG.prayerTranslations[lang]?.Maghrib || CONFIG.prayerTranslations.sq.Maghrib, Icon: Icons.Maghrib },
+                            { name: 'Isha', time: '17:37', arabicName: 'العشاء', translatedName: CONFIG.prayerTranslations[lang]?.Isha || CONFIG.prayerTranslations.sq.Isha, Icon: Icons.Isha }
                         ]);
                     } else {
                         // Show warning but use cached data
@@ -736,8 +1240,29 @@
                 
                 // Listen for storage events (when admin panel updates hadiths in another tab)
                 const handleStorageChange = (e) => {
+                    console.log('Storage event received:', e.key, 'New value:', e.newValue);
                     if (e.key === 'masjid_hadiths' || e.key === 'masjid_sheet_url') {
                         loadHadiths();
+                    } else if (e.key === 'masjid_language') {
+                        // Use e.newValue if available, otherwise read from localStorage
+                        const newLang = e.newValue || getCurrentLanguage();
+                        console.log('Language changed via storage event:', newLang);
+                        setCurrentLanguage(newLang);
+                        // Update prayer times with new translations
+                        if (prayerTimes && prayerTimes.length > 0) {
+                            const updatedPrayerTimes = prayerTimes.map(prayer => ({
+                                ...prayer,
+                                translatedName: CONFIG.prayerTranslations[newLang]?.[prayer.name] || CONFIG.prayerTranslations.sq[prayer.name] || prayer.name
+                            }));
+                            setPrayerTimes(updatedPrayerTimes);
+                        }
+                        // Force re-render to update all language-dependent components
+                        setTick(prev => prev + 1);
+                    } else if (e.key === 'masjid_iqamah_offsets') {
+                        // Reload offsets when they change
+                        loadIqamahOffsets();
+                        // Force re-render to update Iqamah times
+                        setTick(prev => prev + 1);
                     }
                 };
                 
@@ -749,11 +1274,62 @@
                 };
                 window.addEventListener('hadithsUpdated', handleCustomStorage);
                 
+                // Listen for language changes
+                const handleLanguageChange = (e) => {
+                    // Get language from event detail, or fallback to reading from localStorage
+                    const newLang = e.detail?.language || getCurrentLanguage();
+                    console.log('Language change event received:', newLang, 'Event detail:', e.detail);
+                    
+                    // Update state immediately
+                    setCurrentLanguage(newLang);
+                    
+                    // Update prayer times with new translations
+                    if (prayerTimes && prayerTimes.length > 0) {
+                        const updatedPrayerTimes = prayerTimes.map(prayer => ({
+                            ...prayer,
+                            translatedName: CONFIG.prayerTranslations[newLang]?.[prayer.name] || CONFIG.prayerTranslations.sq[prayer.name] || prayer.name
+                        }));
+                        setPrayerTimes(updatedPrayerTimes);
+                    }
+                    
+                    // Force re-render to update all language-dependent components
+                    setTick(prev => prev + 1);
+                };
+                window.addEventListener('languageChanged', handleLanguageChange);
+                
+                // Listen for Iqamah offsets changes
+                const handleIqamahOffsetsChange = (e) => {
+                    loadIqamahOffsets();
+                    // Force re-render to update Iqamah times
+                    setTick(prev => prev + 1);
+                };
+                window.addEventListener('iqamahOffsetsChanged', handleIqamahOffsetsChange);
+                
+                // Listen for announcements changes
+                const handleAnnouncementsChange = () => {
+                    loadAnnouncements();
+                    // Force re-render to update announcements
+                    setTick(prev => prev + 1);
+                };
+                window.addEventListener('announcementsUpdated', handleAnnouncementsChange);
+                
+                // Listen for display settings changes
+                const handleDisplaySettingsChange = (e) => {
+                    loadDisplaySettings();
+                    // Force re-render to update display
+                    setTick(prev => prev + 1);
+                };
+                window.addEventListener('displaySettingsChanged', handleDisplaySettingsChange);
+                
                 return () => {
                     window.removeEventListener('storage', handleStorageChange);
                     window.removeEventListener('hadithsUpdated', handleCustomStorage);
+                    window.removeEventListener('languageChanged', handleLanguageChange);
+                    window.removeEventListener('iqamahOffsetsChanged', handleIqamahOffsetsChange);
+                    window.removeEventListener('announcementsUpdated', handleAnnouncementsChange);
+                    window.removeEventListener('displaySettingsChanged', handleDisplaySettingsChange);
                 };
-            }, [loadHadiths]);
+            }, [loadHadiths, prayerTimes]);
 
             // Clamp currentHadithIndex when hadiths array changes
             useEffect(() => {
@@ -805,7 +1381,7 @@
                     {/* Prayer-specific visual effects */}
                     {activePrayer && (
                         <>
-                            <Stars count={50} visible={activePrayer === 'Isha'} />
+                            <Stars count={120} visible={activePrayer === 'Isha'} />
                             <DawnGlow visible={activePrayer === 'Fajr'} />
                             <SunRays visible={activePrayer === 'Dhuhr'} />
                             <FloatingParticles visible={activePrayer === 'Asr'} />
@@ -880,27 +1456,29 @@
                         </div>
 
                         {/* Clock */}
-                        <div className={`text-center ${CONFIG.compactLayout ? 'mb-2' : 'mb-3 md:mb-4'}`}>
+                        <div className={`text-center ${CONFIG.compactLayout ? 'mb-4' : 'mb-6 md:mb-8'}`} key={`clock-${currentLanguage}`}>
                             <div className={`text-white ${CONFIG.tvMode ? 'text-8xl md:text-9xl lg:text-[12rem]' : 'text-7xl md:text-8xl lg:text-9xl'} font-light tracking-tight mb-2`} style={{textShadow: '0 4px 30px rgba(0,0,0,0.4)'}}>{formatTime()}</div>
-                            <div className={`text-white/70 ${CONFIG.tvMode ? 'text-lg md:text-xl lg:text-2xl' : 'text-base md:text-lg'}`}>{formatDate()}</div>
+                            <div className={`text-white/70 ${CONFIG.tvMode ? 'text-lg md:text-xl lg:text-2xl' : 'text-base md:text-lg'}`}>{formatDate(currentLanguage)}</div>
                             <div className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-base md:text-lg lg:text-xl' : 'text-sm md:text-base'} mt-1`}>{formatHijri()}</div>
                         </div>
 
-                        {/* Countdown */}
+                        {/* 99 Names of Allah Display - Prominently displayed after clock */}
+                        {CONFIG.showAsmaUlHusna && (
+                            <div className={`text-center ${CONFIG.compactLayout ? 'mt-4 mb-5 md:mb-6' : 'mt-6 md:mt-8 lg:mt-10 mb-8 md:mb-10 lg:mb-12'}`}>
+                                <AsmaUlHusnaDisplay />
+                            </div>
+                        )}
+
+                        {/* Countdown & Progress Ring (Merged) - Below 99 Names */}
                         {countdown && (
-                            <div className={`text-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4 md:mb-6'}`}>
-                                <div className={`inline-flex items-center gap-3 ${CONFIG.compactLayout ? 'px-4 py-1.5' : 'px-5 py-2'} glass-card rounded-xl`}>
-                                    <span className={`text-white/50 ${CONFIG.tvMode ? 'text-sm md:text-base' : 'text-xs'} uppercase tracking-wider`}>Next Prayer</span>
-                                    <span className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-base md:text-lg' : ''} font-medium`}>{countdown.name}</span>
-                                    <span className="text-white/30">|</span>
-                                    <span className={`text-[#66e1dc] ${CONFIG.tvMode ? 'text-lg md:text-xl' : ''} font-bold`}>{countdown.hours > 0 ? `${countdown.hours}h ` : ''}{countdown.minutes}m</span>
-                                </div>
+                            <div className={`${CONFIG.compactLayout ? 'mb-4' : 'mb-5 md:mb-6'}`} key={`countdown-${currentLanguage}`}>
+                                <PrayerProgressRing prayerTimes={prayerTimes} currentTime={skopjeTime} countdown={countdown} />
                             </div>
                         )}
 
                         {/* Prayer Cards */}
                         {prayerTimes && prayerTimes.length > 0 && (
-                        <div className={`flex-1 flex items-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4 md:mb-6'}`}>
+                        <div className={`flex-1 flex items-center ${CONFIG.compactLayout ? 'mb-2' : 'mb-3 md:mb-4'}`} key={`prayers-${currentLanguage}`}>
                             <div className={`grid grid-cols-5 ${CONFIG.compactLayout ? 'gap-2 md:gap-3' : 'gap-3 md:gap-4 lg:gap-5'} w-full max-w-[1400px] mx-auto`}>
                                 {prayerTimes.map((prayer) => {
                                     if (!prayer || !prayer.name) return null;
@@ -935,13 +1513,13 @@
                                                 </div>
                                                 
                                                 <div className={`text-center ${CONFIG.compactLayout ? 'mb-1' : 'mb-2'} relative z-10`}>
-                                                    <div className={`${CONFIG.tvMode ? 'text-base md:text-lg lg:text-xl' : 'text-sm md:text-base'} font-semibold ${isActive ? 'text-white' : 'text-white/90'}`}>{prayer.name}</div>
+                                                    <div className={`${CONFIG.tvMode ? 'text-base md:text-lg lg:text-xl' : 'text-sm md:text-base'} font-semibold ${isActive ? 'text-white' : 'text-white/90'}`}>{prayer.translatedName || getPrayerTranslation(prayer.name, currentLanguage)}</div>
                                                     <div className={`${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-lg md:text-xl'} arabic-font ${isActive ? 'text-white/90' : 'text-white/60'}`}>{prayer.arabicName}</div>
                                                 </div>
                                                 
-                                                <div className={`${CONFIG.tvMode ? 'text-4xl md:text-5xl lg:text-6xl xl:text-7xl' : 'text-3xl md:text-4xl lg:text-5xl'} font-bold text-center mb-1 relative z-10 ${isActive ? 'text-white' : 'text-white'}`}>{formatTime12Hour(prayer.time)}</div>
+                                                <div className={`${CONFIG.tvMode ? 'text-4xl md:text-5xl lg:text-6xl xl:text-7xl' : 'text-3xl md:text-4xl lg:text-5xl'} font-bold text-center mb-1 relative z-10 ${isActive ? 'text-white' : 'text-white'}`}>{prayer.time}</div>
                                                 
-                                                <div className={`text-center ${CONFIG.tvMode ? 'text-sm md:text-base' : 'text-xs'} relative z-10 ${isActive ? 'text-white/70' : 'text-[#66e1dc]/60'}`}>Iqamah: {formatTime12Hour(getIqamahTime(prayer.name, prayer.time))}</div>
+                                                <div className={`text-center ${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-base md:text-lg lg:text-xl'} relative z-10 ${isActive ? 'text-white/80' : 'text-[#66e1dc]/70'} font-semibold`}>{getLabelTranslation('iqamah', currentLanguage)}: {getIqamahTime(prayer.name, prayer.time)}</div>
                                                 
                                                 {isActive && (
                                                     <div className="flex justify-center mt-2 relative z-10">
@@ -974,18 +1552,18 @@
 
                         {/* Hadith */}
                         {CONFIG.showHadith && hadiths.length > 0 && currentHadithIndex >= 0 && currentHadithIndex < hadiths.length && hadiths[currentHadithIndex] && (
-                            <div className={`max-w-4xl mx-auto w-full ${CONFIG.compactLayout ? 'mb-2' : 'mb-4'}`}>
-                                <div className={`glass-card rounded-2xl ${CONFIG.compactLayout ? 'p-4 md:p-5' : 'p-5 md:p-6 lg:p-8'} relative overflow-hidden`}>
+                            <div className={`w-[95%] mx-auto ${CONFIG.compactLayout ? 'mb-2 px-1' : 'mb-4 px-2'}`}>
+                                <div className={`glass-card rounded-2xl ${CONFIG.compactLayout ? 'p-6 md:p-7' : 'p-6 md:p-8 lg:p-10 xl:p-12'} relative overflow-hidden`}>
                                     <div className="absolute inset-0 shimmer-effect opacity-20"></div>
-                                    <div className={`text-center ${CONFIG.compactLayout ? 'mb-3' : 'mb-4'} relative z-10`}>
-                                        <div className={`inline-flex items-center gap-2 ${CONFIG.compactLayout ? 'px-3 py-1' : 'px-4 py-1.5'} bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] rounded-full`}>
-                                            <div className={`${CONFIG.tvMode ? 'w-2.5 h-2.5' : 'w-2 h-2'} bg-white rounded-full animate-pulse`}></div>
-                                            <span className={`text-[#0f1c2e] ${CONFIG.tvMode ? 'text-sm md:text-base' : 'text-xs'} font-bold tracking-widest`}>{hadiths[currentHadithIndex]?.source?.toUpperCase() || 'HADITH'}</span>
+                                    <div className={`text-center ${CONFIG.compactLayout ? 'mb-4' : 'mb-5 md:mb-6'} relative z-10`}>
+                                        <div className={`inline-flex items-center gap-2 ${CONFIG.compactLayout ? 'px-4 py-1.5' : 'px-5 py-2'} bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] rounded-full`}>
+                                            <div className={`${CONFIG.tvMode ? 'w-3 h-3' : 'w-2.5 h-2.5'} bg-white rounded-full animate-pulse`}></div>
+                                            <span className={`text-[#0f1c2e] ${CONFIG.tvMode ? 'text-base md:text-lg lg:text-xl' : 'text-sm md:text-base'} font-bold tracking-widest`}>{translateQuranInSource(hadiths[currentHadithIndex]?.source).toUpperCase()}</span>
                                         </div>
                                     </div>
-                                    <p className={`text-white/90 ${CONFIG.tvMode ? 'text-xl md:text-2xl lg:text-3xl' : 'text-lg md:text-xl'} text-center italic relative z-10`}>"{hadiths[currentHadithIndex]?.text || ''}"</p>
-                                    <div className={`flex justify-center gap-2 ${CONFIG.compactLayout ? 'mt-3' : 'mt-4'} relative z-10`}>
-                                        {hadiths.map((_, i) => <button key={i} onClick={() => setCurrentHadithIndex(i)} className={`${CONFIG.tvMode ? 'h-2.5' : 'h-2'} rounded-full transition-all ${i === currentHadithIndex ? `w-10 ${CONFIG.tvMode ? 'md:w-12' : ''} bg-[#66e1dc]` : `${CONFIG.tvMode ? 'w-2.5' : 'w-2'} bg-white/30`}`}/>)}
+                                    <p className={`text-white/95 ${CONFIG.tvMode ? 'text-2xl md:text-3xl lg:text-4xl xl:text-5xl' : 'text-xl md:text-2xl lg:text-3xl'} text-center italic relative z-10 leading-relaxed font-medium`}>"{hadiths[currentHadithIndex]?.text || ''}"</p>
+                                    <div className={`flex justify-center gap-2 ${CONFIG.compactLayout ? 'mt-4' : 'mt-5 md:mt-6'} relative z-10`}>
+                                        {hadiths.map((_, i) => <button key={i} onClick={() => setCurrentHadithIndex(i)} className={`${CONFIG.tvMode ? 'h-3' : 'h-2.5'} rounded-full transition-all ${i === currentHadithIndex ? `w-12 ${CONFIG.tvMode ? 'md:w-14' : ''} bg-[#66e1dc]` : `${CONFIG.tvMode ? 'w-3' : 'w-2.5'} bg-white/30`}`}/>)}
                                     </div>
                                 </div>
                             </div>

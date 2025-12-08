@@ -1,7 +1,7 @@
 // Service Worker for Prayer Times Display
 // Version 1.0.0
 
-const CACHE_NAME = 'prayer-times-v1';
+const CACHE_NAME = 'prayer-times-v3';
 const urlsToCache = [
   '/',
   '/index.html'

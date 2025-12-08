@@ -1,6 +1,6 @@
-# Masjid Shkup Prayer Times Display
+# Masjid Nur Al Tawheed Prayer Times Display
 
-A beautiful, modern digital display for showing daily Islamic prayer times at Masjid Shkup in Skopje, Macedonia.
+A beautiful, modern digital display for showing daily Islamic prayer times at Masjid Nur Al Tawheed in Skopje, Macedonia.
 
 ## Features
 
@@ -44,8 +44,8 @@ Edit the `CONFIG` object in `index.html` to customize:
 
 ```javascript
 const CONFIG = {
-  mosqueName: "MASJID SHKUP",
-  mosqueArabic: "مسجد شكوب",
+  mosqueName: "MASJID NUR AL TAWHEED",
+  mosqueArabic: "مسجد نور التوحيد",
   city: "Skopje",
   country: "Macedonia",
   timezone: "Europe/Skopje",
@@ -58,7 +58,7 @@ const CONFIG = {
     Isha: 15 
   },
   announcements: [
-    "Jummah Prayer at 1:30 PM",
+    "Jummah Prayer at 13:00",
     "Islamic Classes - Sunday after Dhuhr",
     "Support Your Masjid - JazakAllah Khair"
   ]
@@ -174,7 +174,7 @@ Prayer-Times/
 
 ## License
 
-This project is created for Masjid Shkup. All rights reserved.
+This project is created for Masjid Nur Al Tawheed. All rights reserved.
 
 ## Credits
 

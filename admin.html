@@ -7,9 +7,129 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', sans-serif; }
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a2332;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5eead4;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4dd4bf;
+        }
+        
+        /* Card styling - matching React component */
+        .glass-card {
+            background: #1e2937;
+            border: 1px solid #2d3748;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(94, 234, 212, 0.3);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #66e1dc 0%, #4db8b3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Hover effects */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px) scale(1.02);
+        }
+        
+        /* Input focus effects */
+        .input-focus:focus {
+            border-color: #5eead4;
+            box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        /* Button animations */
+        .btn-primary {
+            background: #5eead4;
+            color: #1a2332;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover {
+            background: #4dd4bf;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(94, 234, 212, 0.4);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        /* Status badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-badge.active {
+            background: #5eead4;
+            color: #1a2332;
+            box-shadow: 0 4px 12px rgba(94, 234, 212, 0.3);
+        }
+        .status-badge.inactive {
+            background: #1e2937;
+            border: 1px solid #2d3748;
+            color: #9ca3af;
+        }
+        
+        /* Section icons */
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(94, 234, 212, 0.1);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover .section-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        /* Stat card */
+        .stat-card {
+            background: #1e2937;
+            border: 1px solid #2d3748;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .stat-card:hover {
+            border-color: rgba(94, 234, 212, 0.3);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
         
         /* Custom Notification Styles */
         .notification {
@@ -19,11 +139,11 @@
             z-index: 10000;
             min-width: 320px;
             max-width: 500px;
-            background: linear-gradient(135deg, #1a2d47 0%, #213655 100%);
-            border: 1px solid #66e1dc;
+            background: #1e2937;
+            border: 1px solid #5eead4;
             border-radius: 12px;
             padding: 16px 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(102, 225, 220, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(94, 234, 212, 0.3);
             backdrop-filter: blur(10px);
             animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
             display: flex;
@@ -32,7 +152,7 @@
         }
         
         .notification.success {
-            border-color: #66e1dc;
+            border-color: #5eead4;
         }
         
         .notification.error {
@@ -59,7 +179,7 @@
             flex-shrink: 0;
             background: transparent;
             border: none;
-            color: #66e1dc;
+            color: #5eead4;
             cursor: pointer;
             padding: 4px;
             display: flex;
@@ -70,8 +190,8 @@
         }
         
         .notification-close:hover {
-            background: rgba(102, 225, 220, 0.1);
-            color: #4db8b3;
+            background: rgba(94, 234, 212, 0.1);
+            color: #4dd4bf;
         }
         
         @keyframes slideInRight {
@@ -104,240 +224,511 @@
                 max-width: none;
             }
         }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid rgba(94, 234, 212, 0.1);
+            border-top: 3px solid #5eead4;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Islamic pattern background */
+        .islamic-pattern {
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(94, 234, 212, 0.02) 35px, rgba(94, 234, 212, 0.02) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(94, 234, 212, 0.02) 35px, rgba(94, 234, 212, 0.02) 70px);
+        }
+        
+        /* Fade in animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-[#0f1c2e] via-[#1a2d47] to-[#213655]">
+<body class="min-h-screen bg-[#1a2332] text-white">
+    <!-- Islamic Pattern Background -->
+    <div class="islamic-pattern fixed inset-0 pointer-events-none opacity-30"></div>
     <!-- Notification Container -->
     <div id="notificationContainer"></div>
     
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        
-        <!-- Header -->
-        <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Masjid Admin Panel</h1>
-            <p class="text-[#66e1dc]">Manage hadiths and display settings</p>
-        </div>
-
-        <!-- Instructions -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
-            <h2 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <svg class="w-6 h-6 text-[#66e1dc]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                How to Update Hadiths
-            </h2>
-            <div class="text-white/80 space-y-3">
-                <p><strong class="text-[#66e1dc]">Option 1: Google Sheets (Recommended)</strong></p>
-                <ol class="list-decimal list-inside space-y-2 ml-4">
-                    <li>Create a Google Sheet with two columns: <code class="bg-[#0f1c2e] px-2 py-1 rounded text-[#66e1dc]">text</code> and <code class="bg-[#0f1c2e] px-2 py-1 rounded text-[#66e1dc]">source</code></li>
-                    <li>Add your hadiths (one per row)</li>
-                    <li>Go to File → Share → Publish to web</li>
-                    <li>Select "Comma-separated values (.csv)" and publish</li>
-                    <li>Copy the CSV link and paste it below</li>
-                </ol>
-                
-                <p class="mt-4"><strong class="text-[#66e1dc]">Option 2: Admin Panel (This Page)</strong></p>
-                <p class="ml-4">Use the editor below to add, edit, or remove hadiths. Changes are saved to your browser's localStorage.</p>
-            </div>
-        </div>
-
-        <!-- Language Settings -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
-            <h2 class="text-xl font-semibold text-white mb-4">Display Language</h2>
-            <div class="flex items-center gap-4">
-                <label class="text-white/80">Select language for the prayer times display:</label>
-                <select 
-                    id="languageSelect" 
-                    onchange="saveLanguage()"
-                    class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-[#66e1dc]"
-                >
-                    <option value="sq">Albanian (Shqip)</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
-            <p class="text-white/50 text-sm mt-2">This will change labels and prayer names on the main display</p>
-        </div>
-
-        <!-- Iqamah Offsets -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
-            <h2 class="text-xl font-semibold text-white mb-4">Iqamah Time Offsets</h2>
-            <p class="text-white/60 text-sm mb-4">Set the delay (in minutes) between Adhan and Iqamah for each prayer</p>
-            <div class="space-y-4">
-                <!-- Fajr/Sabahu -->
+    <!-- Header -->
+    <header class="glass-card border-b border-[#2d3748] sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between animate-in">
                 <div class="flex items-center gap-4">
-                    <label class="text-white/80 w-32 text-sm">
-                        <span class="font-medium">Fajr</span> / <span class="text-[#66e1dc]">Sabahu</span>
-                    </label>
-                    <input 
-                        type="number" 
-                        id="offsetFajr" 
-                        min="0" 
-                        max="60" 
-                        step="1"
-                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
-                    >
-                    <span class="text-white/60 text-sm">minutes</span>
+                    <div class="w-14 h-14 bg-[#5eead4] rounded-2xl flex items-center justify-center shadow-lg shadow-teal-500/30">
+                        <svg class="w-7 h-7 text-[#1a2332]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold text-white">Masjid Admin Panel</h1>
+                        <p class="text-gray-400 text-sm font-medium mt-1">Manage prayer times display settings</p>
+                    </div>
                 </div>
-                
-                <!-- Dhuhr/Dreka -->
-                <div class="flex items-center gap-4">
-                    <label class="text-white/80 w-32 text-sm">
-                        <span class="font-medium">Dhuhr</span> / <span class="text-[#66e1dc]">Dreka</span>
-                    </label>
-                    <input 
-                        type="number" 
-                        id="offsetDhuhr" 
-                        min="0" 
-                        max="60" 
-                        step="1"
-                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
-                    >
-                    <span class="text-white/60 text-sm">minutes</span>
-                </div>
-                
-                <!-- Asr/Ikindia -->
-                <div class="flex items-center gap-4">
-                    <label class="text-white/80 w-32 text-sm">
-                        <span class="font-medium">Asr</span> / <span class="text-[#66e1dc]">Ikindia</span>
-                    </label>
-                    <input 
-                        type="number" 
-                        id="offsetAsr" 
-                        min="0" 
-                        max="60" 
-                        step="1"
-                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
-                    >
-                    <span class="text-white/60 text-sm">minutes</span>
-                </div>
-                
-                <!-- Maghrib/Akshami -->
-                <div class="flex items-center gap-4">
-                    <label class="text-white/80 w-32 text-sm">
-                        <span class="font-medium">Maghrib</span> / <span class="text-[#66e1dc]">Akshami</span>
-                    </label>
-                    <input 
-                        type="number" 
-                        id="offsetMaghrib" 
-                        min="0" 
-                        max="60" 
-                        step="1"
-                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
-                    >
-                    <span class="text-white/60 text-sm">minutes</span>
-                </div>
-                
-                <!-- Isha/Jacia -->
-                <div class="flex items-center gap-4">
-                    <label class="text-white/80 w-32 text-sm">
-                        <span class="font-medium">Isha</span> / <span class="text-[#66e1dc]">Jacia</span>
-                    </label>
-                    <input 
-                        type="number" 
-                        id="offsetIsha" 
-                        min="0" 
-                        max="60" 
-                        step="1"
-                        class="bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-2 text-white w-24 focus:outline-none focus:border-[#66e1dc]"
-                    >
-                    <span class="text-white/60 text-sm">minutes</span>
+                <div class="flex items-center gap-3">
+                    <a href="/" target="_blank" class="px-5 py-2.5 bg-[#1e2937] hover:bg-[#2d3748] border border-[#2d3748] rounded-xl flex items-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20">
+                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        <span class="font-medium">View Display</span>
+                    </a>
+                    <div class="status-badge active">
+                        <div class="w-2 h-2 bg-[#1a2332] rounded-full animate-pulse"></div>
+                        <span>ACTIVE</span>
+                    </div>
                 </div>
             </div>
-            <div class="mt-6">
-                <button 
-                    onclick="saveIqamahOffsets()"
-                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
-                >
-                    Save Iqamah Offsets
-                </button>
-            </div>
         </div>
+    </header>
 
-        <!-- Display Settings -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
-            <h2 class="text-xl font-semibold text-white mb-4">Display Settings</h2>
+    <div class="container mx-auto px-6 py-8 max-w-7xl relative z-10">
+        <!-- Statistics Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8 animate-in animate-delay-1">
+            <div class="stat-card rounded-2xl p-6 hover-lift">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-12 h-12 bg-[#5eead4]/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-[#5eead4]/5"></div>
+                </div>
+                <div class="text-4xl font-bold mb-1" id="hadithCount">0</div>
+                <div class="text-sm text-gray-400 font-medium">Hadiths</div>
+            </div>
             
-            <!-- 99 Names of Allah Display -->
-            <div class="mb-4">
-                <label class="text-white/80 text-sm mb-2 block">99 Names of Allah Display</label>
-                <div class="flex items-center gap-4">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input 
-                            type="checkbox" 
-                            id="showAsmaUlHusna"
-                            class="w-5 h-5 rounded border-[#66e1dc]/30 bg-[#0f1c2e] text-[#66e1dc] focus:ring-[#66e1dc] focus:ring-2"
+            <div class="stat-card rounded-2xl p-6 hover-lift">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-12 h-12 bg-[#5eead4]/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                        </svg>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-[#5eead4]/5"></div>
+                </div>
+                <div class="text-4xl font-bold mb-1" id="announcementCount">0</div>
+                <div class="text-sm text-gray-400 font-medium">Announcements</div>
+            </div>
+            
+            <div class="stat-card rounded-2xl p-6 hover-lift">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-12 h-12 bg-[#5eead4]/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                        </svg>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-[#5eead4]/5"></div>
+                </div>
+                <div class="text-4xl font-bold mb-1" id="currentLanguage">sq</div>
+                <div class="text-sm text-gray-400 font-medium">Language</div>
+            </div>
+            
+            <div class="stat-card rounded-2xl p-6 hover-lift">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-12 h-12 bg-[#5eead4]/10 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-[#5eead4]/5"></div>
+                </div>
+                <div class="text-4xl font-bold mb-1" id="displayFeatures">2</div>
+                <div class="text-sm text-gray-400 font-medium">Features Active</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column (2/3 width) -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Language Settings -->
+                <div class="glass-card rounded-2xl p-7 shadow-xl hover-lift animate-in animate-delay-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-[#5eead4]/10 rounded-xl flex items-center justify-center shadow-lg icon-wrapper">
+                            <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Display Language</h2>
+                            <p class="text-sm text-gray-400 font-medium">Change the language for prayer names and labels</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-3">Select Language</label>
+                        <select 
+                            id="languageSelect" 
+                            onchange="saveLanguage()"
+                            class="input-field w-full px-5 py-4 bg-[#0f1621] border border-[#2d3748] rounded-xl text-white font-medium focus:border-[#5eead4] focus:outline-none focus:ring-2 focus:ring-[#5eead4]/30 transition-all"
                         >
-                        <span class="text-white/80">Show 99 Names of Allah display</span>
-                    </label>
+                            <option value="sq">Albanian (Shqip)</option>
+                            <option value="en">English</option>
+                        </select>
+                        <div class="flex items-center gap-2 mt-4 text-sm text-[#5eead4] bg-[#5eead4]/10 px-4 py-3 rounded-lg border border-[#2d3748]">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="font-medium">Changes apply immediately to the main display</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-white/50 text-sm mt-2">Displays one name at a time with Arabic calligraphy, transliteration, and Albanian meaning</p>
-            </div>
-            
-            <div class="mt-6">
-                <button 
-                    onclick="saveDisplaySettings()"
-                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
-                >
-                    Save Display Settings
-                </button>
-            </div>
-        </div>
 
-        <!-- Announcements Management -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-white">Scrolling Announcements</h2>
-                <button 
-                    onclick="addAnnouncement()"
-                    class="bg-[#66e1dc]/20 text-[#66e1dc] font-medium px-4 py-2 rounded-xl hover:bg-[#66e1dc]/30 transition-colors flex items-center gap-2"
-                >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Add Announcement
-                </button>
-            </div>
-            <p class="text-white/60 text-sm mb-4">Manage the scrolling announcements banner. Drag items to reorder.</p>
-            <div id="announcementsList" class="space-y-3">
-                <!-- Announcements will be loaded here -->
-            </div>
-            <div class="mt-6">
-                <button 
-                    onclick="saveAnnouncements()"
-                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
-                >
-                    Save Announcements
-                </button>
-            </div>
-        </div>
+                <!-- Iqamah Offsets -->
+                <div class="glass-card rounded-2xl p-7 shadow-xl hover-lift animate-in animate-delay-3">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-[#5eead4]/10 rounded-xl flex items-center justify-center shadow-lg icon-wrapper">
+                            <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Iqamah Time Offsets</h2>
+                            <p class="text-sm text-gray-400 font-medium">Set delay between Adhan and Iqamah for each prayer</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Fajr/Sabahu -->
+                            <div class="bg-[#0f1621]/50 rounded-xl p-4 border border-[#2d3748]">
+                                <label class="block text-sm font-medium text-white/80 mb-2">
+                                    <span class="font-semibold">Fajr</span> / <span class="text-[#5eead4]">Sabahu</span>
+                                </label>
+                                <div class="flex items-center gap-2">
+                            <input 
+                                type="number" 
+                                id="offsetFajr" 
+                                min="0" 
+                                max="60" 
+                                step="1"
+                                class="input-field flex-1 bg-[#0f1621] border border-[#2d3748] rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-[#5eead4] focus:outline-none focus:ring-2 focus:ring-[#5eead4]/30 pr-16"
+                            >
+                                    <span class="text-white/60 text-sm">min</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Dhuhr/Dreka -->
+                            <div class="bg-[#0f1621]/50 rounded-xl p-4 border border-[#2d3748]">
+                                <label class="block text-sm font-medium text-white/80 mb-2">
+                                    <span class="font-semibold">Dhuhr</span> / <span class="text-[#5eead4]">Dreka</span>
+                                </label>
+                                <div class="flex items-center gap-2">
+                                    <input 
+                                        type="number" 
+                                        id="offsetDhuhr" 
+                                        min="0" 
+                                        max="60" 
+                                        step="1"
+                                        class="input-field flex-1 bg-[#0f1621] border border-[#2d3748] rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-[#5eead4] focus:outline-none focus:ring-2 focus:ring-[#5eead4]/30 pr-16"
+                                    >
+                                    <span class="text-white/60 text-sm">min</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Asr/Ikindia -->
+                            <div class="bg-[#0f1621]/50 rounded-xl p-4 border border-[#2d3748]">
+                                <label class="block text-sm font-medium text-white/80 mb-2">
+                                    <span class="font-semibold">Asr</span> / <span class="text-[#5eead4]">Ikindia</span>
+                                </label>
+                                <div class="flex items-center gap-2">
+                                    <input 
+                                        type="number" 
+                                        id="offsetAsr" 
+                                        min="0" 
+                                        max="60" 
+                                        step="1"
+                                        class="input-field flex-1 bg-[#0f1621] border border-[#2d3748] rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-[#5eead4] focus:outline-none focus:ring-2 focus:ring-[#5eead4]/30 pr-16"
+                                    >
+                                    <span class="text-white/60 text-sm">min</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Maghrib/Akshami -->
+                            <div class="bg-[#0f1621]/50 rounded-xl p-4 border border-[#2d3748]">
+                                <label class="block text-sm font-medium text-white/80 mb-2">
+                                    <span class="font-semibold">Maghrib</span> / <span class="text-[#5eead4]">Akshami</span>
+                                </label>
+                                <div class="flex items-center gap-2">
+                                    <input 
+                                        type="number" 
+                                        id="offsetMaghrib" 
+                                        min="0" 
+                                        max="60" 
+                                        step="1"
+                                        class="input-field flex-1 bg-[#0f1621] border border-[#2d3748] rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-[#5eead4] focus:outline-none focus:ring-2 focus:ring-[#5eead4]/30 pr-16"
+                                    >
+                                    <span class="text-white/60 text-sm">min</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Isha/Jacia -->
+                            <div class="bg-[#0f1621]/50 rounded-xl p-4 border border-[#2d3748]">
+                                <label class="block text-sm font-medium text-white/80 mb-2">
+                                    <span class="font-semibold">Isha</span> / <span class="text-[#5eead4]">Jacia</span>
+                                </label>
+                                <div class="flex items-center gap-2">
+                                    <input 
+                                        type="number" 
+                                        id="offsetIsha" 
+                                        min="0" 
+                                        max="60" 
+                                        step="1"
+                                        class="input-field flex-1 bg-[#0f1621] border border-[#2d3748] rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-[#5eead4] focus:outline-none focus:ring-2 focus:ring-[#5eead4]/30 pr-16"
+                                    >
+                                    <span class="text-white/60 text-sm">min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button 
+                            onclick="saveIqamahOffsets()"
+                            class="btn-primary text-[#1a2332] font-bold px-6 py-4 rounded-xl w-full flex items-center justify-center gap-2 text-lg shadow-lg shadow-teal-500/30"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Save Iqamah Offsets
+                        </button>
+                    </div>
+                </div>
 
-        <!-- Google Sheets Configuration -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
-            <h2 class="text-xl font-semibold text-white mb-4">Google Sheets URL</h2>
-            <div class="flex gap-3">
-                <input 
-                    type="text" 
-                    id="sheetUrl" 
-                    placeholder="Paste your Google Sheets CSV URL here..."
-                    class="flex-1 bg-[#0f1c2e] border border-[#66e1dc]/30 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc]"
-                >
-                <button 
-                    onclick="saveSheetUrl()"
-                    class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-semibold px-6 py-3 rounded-xl hover:opacity-90 transition-opacity"
-                >
-                    Save
-                </button>
+                <!-- Display Settings -->
+                <div class="glass-card rounded-2xl p-7 shadow-xl hover-lift animate-in animate-delay-4">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-[#5eead4]/10 rounded-xl flex items-center justify-center shadow-lg icon-wrapper">
+                            <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Display Settings</h2>
+                            <p class="text-sm text-gray-400 font-medium">Configure visual features on the display</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-[#0f1621] border border-[#2d3748] rounded-xl p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 bg-[#5eead4]/10 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-lg">99 Names of Allah Display</h3>
+                                        <p class="text-sm text-gray-400">Show Arabic calligraphy with transliteration and meaning</p>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    onclick="toggleAsmaUlHusna()"
+                                    class="relative w-16 h-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#5eead4]/50"
+                                    id="toggleSwitch"
+                                >
+                                    <input 
+                                        type="checkbox" 
+                                        id="showAsmaUlHusna"
+                                        class="sr-only"
+                                    >
+                                    <div class="absolute top-1 w-6 h-6 rounded-full shadow-lg transition-all duration-300" id="toggleCircle"></div>
+                                </button>
+                            </div>
+                        </div>
+                        <button 
+                            onclick="saveDisplaySettings()"
+                            class="btn-primary text-[#1a2332] font-bold px-6 py-4 rounded-xl w-full flex items-center justify-center gap-2 text-lg shadow-lg shadow-teal-500/30"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Save Display Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Announcements Management -->
+                <div class="glass-card rounded-2xl p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-4">
+                            <div class="section-icon">
+                                <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white mb-1">Scrolling Announcements</h2>
+                                <p class="text-sm text-white/60">Manage banner announcements</p>
+                            </div>
+                        </div>
+                        <button 
+                            onclick="addAnnouncement()"
+                            class="bg-[#5eead4]/20 text-[#5eead4] font-medium px-4 py-2 rounded-xl hover:bg-[#5eead4]/30 transition-colors flex items-center gap-2"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Add
+                        </button>
+                    </div>
+                    <div id="announcementsList" class="space-y-3">
+                        <!-- Announcements will be loaded here -->
+                    </div>
+                    <button 
+                        onclick="saveAnnouncements()"
+                        class="btn-primary text-[#1a2332] font-semibold px-6 py-3 rounded-xl w-full mt-6 flex items-center justify-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Save Announcements
+                    </button>
+                </div>
             </div>
-            <p class="text-white/50 text-sm mt-2">This URL will be used to fetch hadiths automatically</p>
+
+            <!-- Right Column (1/3 width) -->
+            <div class="space-y-6">
+                <!-- Quick Actions -->
+                <div class="glass-card rounded-2xl p-6 hover-lift">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Quick Actions
+                    </h3>
+                    <div class="space-y-2">
+                        <button 
+                            onclick="saveHadiths()"
+                            class="w-full bg-gradient-to-r from-[#5eead4] to-[#4dd4bf] text-[#1a2332] font-semibold px-4 py-3 rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Save All Changes
+                        </button>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button 
+                                onclick="exportJSON()"
+                                class="bg-[#0f1621] text-white font-medium px-3 py-2 rounded-lg hover:bg-[#1e2937] transition-colors border border-[#2d3748] text-sm flex items-center justify-center gap-1"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                JSON
+                            </button>
+                            <button 
+                                onclick="exportCSV()"
+                                class="bg-[#0f1621] text-white font-medium px-3 py-2 rounded-lg hover:bg-[#1e2937] transition-colors border border-[#2d3748] text-sm flex items-center justify-center gap-1"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Sheets Configuration -->
+                <div class="glass-card rounded-2xl p-6 hover-lift">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#5eead4]/20 to-[#4dd4bf]/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Google Sheets</h3>
+                    </div>
+                    <p class="text-sm text-white/60 mb-4">Import hadiths from a Google Sheet CSV URL</p>
+                    <div class="space-y-3">
+                        <input 
+                            type="text" 
+                            id="sheetUrl" 
+                            placeholder="Paste CSV URL here..."
+                            class="w-full bg-[#0f1621] border border-[#2d3748] rounded-xl px-4 py-3 text-white placeholder-white/40 focus:outline-none input-focus text-sm"
+                        >
+                        <button 
+                            onclick="saveSheetUrl()"
+                            class="w-full bg-[#5eead4]/20 text-[#5eead4] font-medium px-4 py-2 rounded-xl hover:bg-[#5eead4]/30 transition-colors flex items-center justify-center gap-2"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Save URL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Instructions Card -->
+                <div class="glass-card rounded-2xl p-6 hover-lift">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#5eead4]/20 to-[#4dd4bf]/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">How to Update</h3>
+                    </div>
+                    <div class="text-sm text-white/70 space-y-3">
+                        <div>
+                            <p class="font-semibold text-[#5eead4] mb-1">Option 1: Google Sheets</p>
+                            <ol class="list-decimal list-inside space-y-1 text-white/60 ml-2">
+                                <li>Create sheet with <code class="bg-[#0f1621] px-1 rounded text-[#5eead4]">text</code> and <code class="bg-[#0f1621] px-1 rounded text-[#5eead4]">source</code> columns</li>
+                                <li>Publish as CSV</li>
+                                <li>Paste URL above</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#5eead4] mb-1">Option 2: Manual Entry</p>
+                            <p class="text-white/60 ml-2">Use the hadith editor below to add/edit directly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Hadith Editor -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mb-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-white">Current Hadiths</h2>
+        <div class="glass-card rounded-2xl p-6 mt-6 hover-lift">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-4">
+                    <div class="section-icon">
+                        <svg class="w-6 h-6 text-[#5eead4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-1">Hadith Management</h2>
+                        <p class="text-sm text-white/60">Add, edit, or remove hadiths from the display</p>
+                    </div>
+                </div>
                 <button 
                     onclick="addHadith()"
-                    class="bg-[#66e1dc]/20 text-[#66e1dc] font-medium px-4 py-2 rounded-xl hover:bg-[#66e1dc]/30 transition-colors flex items-center gap-2"
+                    class="bg-[#5eead4]/20 text-[#5eead4] font-medium px-4 py-2 rounded-xl hover:bg-[#5eead4]/30 transition-colors flex items-center gap-2"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -350,35 +741,6 @@
                 <!-- Hadiths will be loaded here -->
             </div>
         </div>
-
-        <!-- Save Button -->
-        <div class="text-center">
-            <button 
-                onclick="saveHadiths()"
-                class="bg-gradient-to-r from-[#66e1dc] to-[#4db8b3] text-[#0f1c2e] font-bold px-12 py-4 rounded-xl text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#66e1dc]/20"
-            >
-                Save All Changes
-            </button>
-        </div>
-
-        <!-- Export Section -->
-        <div class="bg-[#1a2d47]/80 backdrop-blur-xl border border-[#66e1dc]/20 rounded-2xl p-6 mt-8">
-            <h2 class="text-xl font-semibold text-white mb-4">Export Hadiths</h2>
-            <div class="flex gap-3">
-                <button 
-                    onclick="exportJSON()"
-                    class="bg-[#0f1c2e] text-white font-medium px-6 py-3 rounded-xl hover:bg-[#0f1c2e]/80 transition-colors border border-[#66e1dc]/30"
-                >
-                    Download as JSON
-                </button>
-                <button 
-                    onclick="exportCSV()"
-                    class="bg-[#0f1c2e] text-white font-medium px-6 py-3 rounded-xl hover:bg-[#0f1c2e]/80 transition-colors border border-[#66e1dc]/30"
-                >
-                    Download as CSV
-                </button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -387,7 +749,6 @@
             const container = document.getElementById('notificationContainer');
             if (!container) return;
             
-            // Remove any existing notifications
             const existing = container.querySelector('.notification');
             if (existing) {
                 existing.remove();
@@ -413,7 +774,6 @@
             
             container.appendChild(notification);
             
-            // Auto-remove after 3 seconds
             setTimeout(() => {
                 if (notification.parentElement) {
                     notification.style.animation = 'fadeOut 0.3s ease-in forwards';
@@ -423,12 +783,9 @@
         }
 
         // ==================== SECURITY CONFIGURATION ====================
-        // Set ENABLE_PASSWORD_PROTECTION to true to require a password
-        // Set ADMIN_PASSWORD to your desired password (change this!)
-        const ENABLE_PASSWORD_PROTECTION = true; // Set to true to enable
-        const ADMIN_PASSWORD = 'masjid2025'; // CHANGE THIS PASSWORD!
+        const ENABLE_PASSWORD_PROTECTION = true;
+        const ADMIN_PASSWORD = 'masjid2025';
         
-        // Simple password protection
         function checkAuth() {
             if (!ENABLE_PASSWORD_PROTECTION) return true;
             
@@ -446,21 +803,73 @@
             return false;
         }
         
-        // Check authentication on page load
         if (!checkAuth()) {
             document.body.innerHTML = '<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f1c2e] via-[#1a2d47] to-[#213655]"><div class="text-center"><h1 class="text-3xl font-bold text-white mb-4">Access Denied</h1><p class="text-white/70">Invalid password. Redirecting...</p></div></div>';
             setTimeout(() => window.location.href = '/', 2000);
         }
         
+        // ==================== STATISTICS UPDATE ====================
+        function updateStatistics() {
+            document.getElementById('hadithCount').textContent = hadiths.length;
+            document.getElementById('announcementCount').textContent = announcements.filter(a => a.trim() !== '').length;
+            const lang = localStorage.getItem('masjid_language') || 'sq';
+            document.getElementById('currentLanguage').textContent = lang === 'sq' ? 'Albanian' : 'English';
+            const showAsma = localStorage.getItem('masjid_show_asma_ul_husna') !== 'false';
+            document.getElementById('displayFeatures').textContent = showAsma ? '2' : '1';
+        }
+
+        // ==================== TOGGLE SWITCH ====================
+        function initToggleSwitch() {
+            const checkbox = document.getElementById('showAsmaUlHusna');
+            const switchDiv = document.getElementById('toggleSwitch');
+            const circle = document.getElementById('toggleCircle');
+            
+            if (!checkbox || !switchDiv || !circle) return;
+            
+            function updateToggle() {
+                // Remove all possible classes first
+                switchDiv.classList.remove('bg-[#5eead4]', 'bg-[#2d3748]');
+                circle.classList.remove('bg-white', 'bg-[#1a2332]', 'left-1', 'left-9');
+                
+                if (checkbox.checked) {
+                    // ON state: teal background, dark circle on right
+                    switchDiv.classList.add('bg-[#5eead4]');
+                    circle.classList.add('bg-[#1a2332]', 'left-9');
+                } else {
+                    // OFF state: dark background, white circle on left
+                    switchDiv.classList.add('bg-[#2d3748]');
+                    circle.classList.add('bg-white', 'left-1');
+                }
+            }
+            
+            // Update on checkbox change
+            checkbox.addEventListener('change', updateToggle);
+            
+            // Initial update
+            updateToggle();
+        }
+        
+        function toggleAsmaUlHusna() {
+            const checkbox = document.getElementById('showAsmaUlHusna');
+            if (!checkbox) return;
+            
+            // Toggle the checkbox state
+            checkbox.checked = !checkbox.checked;
+            
+            // Trigger change event to update visual state
+            checkbox.dispatchEvent(new Event('change'));
+            
+            // Also manually update in case event doesn't fire
+            initToggleSwitch();
+        }
+
         // ==================== ANNOUNCEMENTS MANAGEMENT ====================
-        // Default announcements
         let announcements = [
             "Jummah Prayer at 13:00",
             "Islamic Classes - Sunday after Dhuhr",
             "Support Your Masjid - JazakAllah Khair"
         ];
 
-        // Load announcements from localStorage on page load
         function loadAnnouncements() {
             const saved = localStorage.getItem('masjid_announcements');
             if (saved) {
@@ -471,18 +880,23 @@
                 }
             }
             renderAnnouncements();
+            updateStatistics();
         }
 
-        // Render announcements list with drag-and-drop support
         function renderAnnouncements() {
             const container = document.getElementById('announcementsList');
             if (!container) return;
             
+            if (announcements.length === 0) {
+                container.innerHTML = '<div class="text-center py-8 text-white/40">No announcements yet. Click "Add" to create one.</div>';
+                return;
+            }
+            
             container.innerHTML = announcements.map((announcement, index) => {
                 const escapedText = escapeHTML(announcement);
                 return `
-                <div class="bg-[#0f1c2e]/50 rounded-xl p-4 border border-[#66e1dc]/10 flex items-center gap-3 group hover:border-[#66e1dc]/30 transition-colors" data-index="${index}">
-                    <div class="flex-shrink-0 cursor-move text-[#66e1dc]/50 hover:text-[#66e1dc] transition-colors" title="Drag to reorder">
+                <div class="bg-[#0f1621]/50 rounded-xl p-4 border border-[#2d3748] flex items-center gap-3 group hover:border-[#5eead4]/30 transition-colors" data-index="${index}">
+                    <div class="flex-shrink-0 cursor-move text-[#5eead4]/50 hover:text-[#5eead4] transition-colors" title="Drag to reorder">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
                         </svg>
@@ -490,7 +904,7 @@
                     <div class="flex-1">
                         <input 
                             type="text"
-                            class="w-full bg-[#1a2d47] border border-[#66e1dc]/20 rounded-lg px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc]"
+                            class="w-full bg-[#1e2937] border border-[#2d3748] rounded-lg px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:border-[#5eead4] text-sm"
                             placeholder="Enter announcement text..."
                             value="${escapedText}"
                             onchange="updateAnnouncement(${index}, this.value)"
@@ -509,11 +923,9 @@
             `;
             }).join('');
             
-            // Add drag and drop functionality
             makeSortable();
         }
 
-        // Make announcements list sortable
         function makeSortable() {
             const container = document.getElementById('announcementsList');
             if (!container) return;
@@ -531,7 +943,6 @@
                 
                 item.addEventListener('dragend', (e) => {
                     item.style.opacity = '1';
-                    // Update order after drag
                     const items = container.querySelectorAll('[data-index]');
                     const newOrder = [];
                     items.forEach((el) => {
@@ -566,11 +977,9 @@
             });
         }
 
-        // Add new announcement
         function addAnnouncement() {
             announcements.push("");
             renderAnnouncements();
-            // Focus on the new input
             setTimeout(() => {
                 const inputs = document.querySelectorAll('#announcementsList input');
                 if (inputs.length > 0) {
@@ -579,37 +988,33 @@
             }, 100);
         }
 
-        // Update announcement
         function updateAnnouncement(index, value) {
             if (index >= 0 && index < announcements.length) {
                 announcements[index] = value;
             }
         }
 
-        // Delete announcement
         function deleteAnnouncement(index) {
             if (confirm('Are you sure you want to delete this announcement?')) {
                 announcements.splice(index, 1);
                 renderAnnouncements();
+                updateStatistics();
             }
         }
 
-        // Save announcements to localStorage
         function saveAnnouncements() {
-            // Filter out empty announcements
             const filtered = announcements.filter(a => a.trim() !== '');
             if (filtered.length === 0) {
                 showNotification('Please add at least one announcement.', 'error');
                 return;
             }
             localStorage.setItem('masjid_announcements', JSON.stringify(filtered));
-            // Dispatch custom event to notify main display (for same-tab updates)
             window.dispatchEvent(new CustomEvent('announcementsUpdated'));
-            showNotification('Announcements saved successfully! The display will update automatically.', 'success');
+            showNotification('Announcements saved successfully!', 'success');
+            updateStatistics();
         }
 
         // ==================== HADITH MANAGEMENT ====================
-        // Default hadiths
         let hadiths = [
             { text: "Prayer is the pillar of religion and the key to Paradise.", source: "Hadith" },
             { text: "The best prayer is that which is performed on time.", source: "Hadith" },
@@ -619,7 +1024,6 @@
             { text: "Indeed, prayer prohibits immorality and wrongdoing.", source: "Quran 29:45" }
         ];
 
-        // Escape HTML to prevent XSS attacks
         function escapeHTML(str) {
             if (str === null || str === undefined) {
                 return '';
@@ -629,7 +1033,6 @@
             return div.innerHTML;
         }
 
-        // Escape HTML attribute values (handles quotes)
         function escapeHTMLAttr(str) {
             if (str === null || str === undefined) {
                 return '';
@@ -642,47 +1045,38 @@
                 .replace(/>/g, '&gt;');
         }
 
-        // Properly escape CSV field values
-        // RFC 4180: Fields containing quotes, commas, or newlines must be quoted
-        // Quotes inside quoted fields must be escaped by doubling them
-        // Newlines within quoted fields are preserved
         function escapeCSVField(field) {
             if (field === null || field === undefined) {
                 return '""';
             }
             const str = String(field);
-            // If field contains quote, comma, or newline, it must be quoted
             if (str.includes('"') || str.includes(',') || str.includes('\n') || str.includes('\r')) {
-                // Escape quotes by doubling them, then wrap in quotes
-                // Newlines are preserved inside quoted fields per RFC 4180
                 return '"' + str.replace(/"/g, '""') + '"';
             }
-            // If field doesn't need quoting, return as-is
             return str;
         }
 
-        // Load hadiths from localStorage on page load
         function loadHadiths() {
             const saved = localStorage.getItem('masjid_hadiths');
             if (saved) {
-                hadiths = JSON.parse(saved);
+                try {
+                    hadiths = JSON.parse(saved);
+                } catch (err) {
+                    console.warn('Failed to parse saved hadiths:', err);
+                }
             }
             renderHadiths();
             
-            // Load sheet URL if saved
             const sheetUrl = localStorage.getItem('masjid_sheet_url');
             if (sheetUrl) {
                 document.getElementById('sheetUrl').value = sheetUrl;
             }
             
-            // Load language preference
             const language = localStorage.getItem('masjid_language') || 'sq';
             document.getElementById('languageSelect').value = language;
             
-            // Load announcements
             loadAnnouncements();
             
-            // Load Iqamah offsets
             const savedOffsets = localStorage.getItem('masjid_iqamah_offsets');
             if (savedOffsets) {
                 try {
@@ -696,7 +1090,6 @@
                     console.warn('Failed to parse saved offsets:', err);
                 }
             } else {
-                // Use default values
                 document.getElementById('offsetFajr').value = 20;
                 document.getElementById('offsetDhuhr').value = 15;
                 document.getElementById('offsetAsr').value = 15;
@@ -704,16 +1097,22 @@
                 document.getElementById('offsetIsha').value = 15;
             }
             
-            // Load display settings
             const savedShowAsma = localStorage.getItem('masjid_show_asma_ul_husna');
+            const checkbox = document.getElementById('showAsmaUlHusna');
             if (savedShowAsma !== null) {
-                document.getElementById('showAsmaUlHusna').checked = savedShowAsma === 'true';
+                checkbox.checked = savedShowAsma === 'true';
             } else {
-                document.getElementById('showAsmaUlHusna').checked = true; // Default: show
+                checkbox.checked = true; // Default: show
             }
+            
+            // Initialize toggle switch after setting the value
+            setTimeout(() => {
+                initToggleSwitch();
+            }, 100);
+            
+            updateStatistics();
         }
 
-        // Save Iqamah offsets
         function saveIqamahOffsets() {
             const offsets = {
                 Fajr: parseInt(document.getElementById('offsetFajr').value) || 20,
@@ -724,51 +1123,53 @@
             };
             
             localStorage.setItem('masjid_iqamah_offsets', JSON.stringify(offsets));
-            // Dispatch custom event to notify main display (for same-tab updates)
             window.dispatchEvent(new CustomEvent('iqamahOffsetsChanged', { detail: { offsets } }));
-            showNotification('Iqamah offsets saved successfully! The display will update automatically.', 'success');
+            showNotification('Iqamah offsets saved successfully!', 'success');
         }
 
-        // Save language preference
         function saveLanguage() {
             const language = document.getElementById('languageSelect').value;
             localStorage.setItem('masjid_language', language);
-            // Dispatch custom event to notify main display (for same-tab updates)
             window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language } }));
-            showNotification('Language preference saved! The display will update automatically.', 'success');
+            showNotification('Language preference saved!', 'success');
+            updateStatistics();
         }
 
-        // Save display settings
         function saveDisplaySettings() {
             const showAsma = document.getElementById('showAsmaUlHusna').checked;
             
             localStorage.setItem('masjid_show_asma_ul_husna', showAsma.toString());
             
-            // Dispatch custom event to notify main display (for same-tab updates)
             window.dispatchEvent(new CustomEvent('displaySettingsChanged', { 
                 detail: { 
                     showAsmaUlHusna: showAsma
                 } 
             }));
-            showNotification('Display settings saved successfully! The display will update automatically.', 'success');
+            showNotification('Display settings saved successfully!', 'success');
+            updateStatistics();
         }
 
-        // Render hadith list with proper XSS protection
         function renderHadiths() {
             const container = document.getElementById('hadithList');
+            if (!container) return;
+            
+            if (hadiths.length === 0) {
+                container.innerHTML = '<div class="text-center py-8 text-white/40">No hadiths yet. Click "Add Hadith" to create one.</div>';
+                return;
+            }
+            
             container.innerHTML = hadiths.map((hadith, index) => {
-                // Escape HTML content for textarea (prevents </textarea> injection)
                 const escapedText = escapeHTML(hadith.text);
-                // Escape HTML attribute for input value (prevents quote injection)
                 const escapedSource = escapeHTMLAttr(hadith.source);
                 
                 return `
-                <div class="bg-[#0f1c2e]/50 rounded-xl p-4 border border-[#66e1dc]/10">
+                <div class="bg-[#0f1621]/50 rounded-xl p-5 border border-[#2d3748] hover:border-[#5eead4]/30 transition-colors">
                     <div class="flex justify-between items-start gap-4 mb-3">
-                        <span class="text-[#66e1dc] text-sm font-medium">#${index + 1}</span>
+                        <span class="text-[#5eead4] text-sm font-semibold bg-[#5eead4]/10 px-3 py-1 rounded-lg">#${index + 1}</span>
                         <button 
                             onclick="deleteHadith(${index})"
-                            class="text-red-400 hover:text-red-300 transition-colors"
+                            class="text-red-400 hover:text-red-300 transition-colors p-1"
+                            title="Delete hadith"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -776,14 +1177,14 @@
                         </button>
                     </div>
                     <textarea 
-                        class="w-full bg-[#1a2d47] border border-[#66e1dc]/20 rounded-lg px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc] resize-none mb-3"
-                        rows="2"
+                        class="w-full bg-[#1e2937] border border-[#2d3748] rounded-lg px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#5eead4] resize-none mb-3 input-focus"
+                        rows="3"
                         placeholder="Hadith text..."
                         onchange="updateHadith(${index}, 'text', this.value)"
                     >${escapedText}</textarea>
                     <input 
                         type="text"
-                        class="w-full bg-[#1a2d47] border border-[#66e1dc]/20 rounded-lg px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:border-[#66e1dc]"
+                        class="w-full bg-[#1e2937] border border-[#2d3748] rounded-lg px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#5eead4] input-focus"
                         placeholder="Source (e.g., Sahih Bukhari, Quran 2:45)"
                         value="${escapedSource}"
                         onchange="updateHadith(${index}, 'source', this.value)"
@@ -791,51 +1192,53 @@
                 </div>
             `;
             }).join('');
+            
+            updateStatistics();
         }
 
-        // Add new hadith
         function addHadith() {
             hadiths.push({ text: "", source: "Hadith" });
             renderHadiths();
-            // Scroll to bottom
-            document.getElementById('hadithList').lastElementChild.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                const textareas = document.querySelectorAll('#hadithList textarea');
+                if (textareas.length > 0) {
+                    textareas[textareas.length - 1].focus();
+                }
+            }, 100);
         }
 
-        // Update hadith
         function updateHadith(index, field, value) {
-            hadiths[index][field] = value;
+            if (index >= 0 && index < hadiths.length) {
+                hadiths[index][field] = value;
+            }
         }
 
-        // Delete hadith
         function deleteHadith(index) {
             if (confirm('Are you sure you want to delete this hadith?')) {
                 hadiths.splice(index, 1);
                 renderHadiths();
+                updateStatistics();
             }
         }
 
-        // Save hadiths to localStorage
         function saveHadiths() {
             localStorage.setItem('masjid_hadiths', JSON.stringify(hadiths));
-            // Dispatch custom event to notify main display (for same-tab updates)
             window.dispatchEvent(new Event('hadithsUpdated'));
-            showNotification('Hadiths saved successfully! The display will update automatically.', 'success');
+            showNotification('Hadiths saved successfully!', 'success');
+            updateStatistics();
         }
 
-        // Save Google Sheets URL
         function saveSheetUrl() {
             const url = document.getElementById('sheetUrl').value.trim();
             if (url) {
                 localStorage.setItem('masjid_sheet_url', url);
-                // Dispatch custom event to notify main display (for same-tab updates)
                 window.dispatchEvent(new Event('hadithsUpdated'));
-                showNotification('Google Sheets URL saved! The display will fetch hadiths from this sheet.', 'success');
+                showNotification('Google Sheets URL saved!', 'success');
             } else {
                 showNotification('Please enter a valid Google Sheets URL.', 'error');
             }
         }
 
-        // Export as JSON
         function exportJSON() {
             const blob = new Blob([JSON.stringify(hadiths, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -843,14 +1246,11 @@
             a.href = url;
             a.download = 'hadiths.json';
             a.click();
+            showNotification('Hadiths exported as JSON!', 'success');
         }
 
-        // Export as CSV with proper escaping (handles quotes and newlines)
         function exportCSV() {
-            // Header row
             const header = 'text,source\n';
-            // Data rows with proper CSV escaping
-            // escapeCSVField handles quotes (doubling them) and preserves newlines inside quoted fields
             const rows = hadiths.map(h => {
                 return escapeCSVField(h.text) + ',' + escapeCSVField(h.source);
             }).join('\n');
@@ -862,6 +1262,7 @@
             a.href = url;
             a.download = 'hadiths.csv';
             a.click();
+            showNotification('Hadiths exported as CSV!', 'success');
         }
 
         // Initialize
@@ -869,4 +1270,3 @@
     </script>
 </body>
 </html>
-

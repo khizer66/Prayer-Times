@@ -1060,7 +1060,29 @@
 
             useEffect(() => {
                 fetchPrayerTimes();
-                const clockTimer = setInterval(() => setTick(t => t + 1), 1000);
+                let lastCheckedLang = getCurrentLanguage();
+                const clockTimer = setInterval(() => {
+                    setTick(t => t + 1);
+                    // Check for language changes on every tick (every second)
+                    const savedLang = getCurrentLanguage();
+                    if (savedLang !== lastCheckedLang) {
+                        console.log('Language changed detected on tick:', savedLang, 'was:', lastCheckedLang);
+                        lastCheckedLang = savedLang;
+                        setCurrentLanguage(savedLang);
+                        // Update prayer times with new translations - use functional update to get latest state
+                        setPrayerTimes(prevTimes => {
+                            if (prevTimes && prevTimes.length > 0) {
+                                return prevTimes.map(prayer => ({
+                                    ...prayer,
+                                    translatedName: CONFIG.prayerTranslations[savedLang]?.[prayer.name] || CONFIG.prayerTranslations.sq[prayer.name] || prayer.name
+                                }));
+                            }
+                            return prevTimes;
+                        });
+                        // Force re-render to update all language-dependent components
+                        setTick(prev => prev + 1);
+                    }
+                }, 1000);
                 
                 // Auto refresh page at 3 AM daily to prevent memory leaks
                 const scheduleRefresh = () => {
@@ -1321,6 +1343,28 @@
                 };
                 window.addEventListener('displaySettingsChanged', handleDisplaySettingsChange);
                 
+                // Check for language changes when window regains focus (in case admin panel was in same tab)
+                const handleFocus = () => {
+                    const savedLang = getCurrentLanguage();
+                    if (savedLang !== currentLanguage) {
+                        console.log('Language changed detected on focus:', savedLang);
+                        setCurrentLanguage(savedLang);
+                        // Update prayer times with new translations
+                        setPrayerTimes(prevTimes => {
+                            if (prevTimes && prevTimes.length > 0) {
+                                return prevTimes.map(prayer => ({
+                                    ...prayer,
+                                    translatedName: CONFIG.prayerTranslations[savedLang]?.[prayer.name] || CONFIG.prayerTranslations.sq[prayer.name] || prayer.name
+                                }));
+                            }
+                            return prevTimes;
+                        });
+                        // Force re-render to update all language-dependent components
+                        setTick(prev => prev + 1);
+                    }
+                };
+                window.addEventListener('focus', handleFocus);
+                
                 return () => {
                     window.removeEventListener('storage', handleStorageChange);
                     window.removeEventListener('hadithsUpdated', handleCustomStorage);
@@ -1328,8 +1372,9 @@
                     window.removeEventListener('iqamahOffsetsChanged', handleIqamahOffsetsChange);
                     window.removeEventListener('announcementsUpdated', handleAnnouncementsChange);
                     window.removeEventListener('displaySettingsChanged', handleDisplaySettingsChange);
+                    window.removeEventListener('focus', handleFocus);
                 };
-            }, [loadHadiths, prayerTimes]);
+            }, [loadHadiths, prayerTimes, currentLanguage]);
 
             // Clamp currentHadithIndex when hadiths array changes
             useEffect(() => {
